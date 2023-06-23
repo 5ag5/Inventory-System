@@ -24,10 +24,10 @@ public class Audit {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;  // Many to One
     private Parameter parameter;
-    /*private Product product;
+    private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private User user; // Many to One*/
+    private User user; // Many to One
 
     public  Audit(){
 
@@ -117,7 +117,7 @@ public class Audit {
         this.parameter = parameter;
     }
 
-    /*public Product getProduct() {
+    public Product getProduct() {
         return product;
     }
 
@@ -131,5 +131,5 @@ public class Audit {
 
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 }

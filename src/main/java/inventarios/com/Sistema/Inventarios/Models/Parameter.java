@@ -19,11 +19,11 @@ public class Parameter {
     private Set<Audit> audits;
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private Set<Category> categories;
-    /*@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private Set<Product> products;*/
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    private Set<Product> products;
 
-    /*@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<User> users;*/
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<User> users;
 
     public Parameter(){
 
@@ -52,7 +52,7 @@ public class Parameter {
         this.parameterDescription = parameterDescription;
     }
 
-    public boolean isParameterStatus() {
+    public boolean getParameterStatus() {
         return parameterStatus;
     }
 
@@ -92,7 +92,7 @@ public class Parameter {
         this.categories = categories;
     }
 
-    /*public Set<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
@@ -106,7 +106,7 @@ public class Parameter {
 
     public void setUsers(Set<User> users) {
         this.users = users;
-    }*/
+    }
 
     public void addAudit(Audit audit){
         audit.setParameter(this);
