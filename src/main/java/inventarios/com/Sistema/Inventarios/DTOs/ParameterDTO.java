@@ -14,8 +14,8 @@ public class ParameterDTO {
     private String  valueParameter;
     private Set<AuditDTO> audits;
     private Set<CategoryDTO> categories;
-   // private Set<ProductDTO> products;
-    //private Set<UserDTO> users;
+    private Set<ProductDTO> products;
+    private Set<UserDTO> users;
 
     public ParameterDTO(Parameter parameter) {
         this.id = parameter.getId();
@@ -25,8 +25,8 @@ public class ParameterDTO {
         this.valueParameter = parameter.getValueParameter();
         this.audits = parameter.getAudits().stream().map(audit-> new AuditDTO(audit)).collect(Collectors.toSet());
         this.categories = parameter.getCategories().stream().map(category -> new CategoryDTO(category)).collect(Collectors.toSet());
-       // this.products = parameter.getProducts().stream().map(product -> new PrductDTO(product)).collect(Collectors.toSet());
-        //this.users = parameter.getUsers().stream().map(user -> new UserDTO(user)).collect(Collectors.toSet());
+        this.products = parameter.getProducts().stream().map(product -> new ProductDTO(product)).collect(Collectors.toSet());
+        this.users = parameter.getUsers().stream().map(user -> new UserDTO(user)).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -57,11 +57,11 @@ public class ParameterDTO {
         return categories;
     }
 
-    /*public Set<ProductDTO> getProducts() {
+    public Set<ProductDTO> getProducts() {
         return products;
     }
 
     public Set<UserDTO> getUsers() {
         return users;
-    }*/
+    }
 }
