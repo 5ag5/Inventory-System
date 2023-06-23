@@ -18,8 +18,8 @@ public class Category {
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private Set<Audit> audits;
 
-   /* @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private Set<Product> products; //One to Many*/
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    private Set<Product> products; //One to Many
 
     public Category() {
     }
@@ -53,7 +53,7 @@ public class Category {
         this.audits = audits;
     }
 
-    public boolean isStateCategory() {
+    public boolean getStateCategory() {
         return stateCategory;
     }
 
@@ -61,13 +61,13 @@ public class Category {
         this.stateCategory = stateCategory;
     }
 
-    /*public Set<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
-    }*/
+    }
 
-    /*public void setProducts(Set<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
-    }*/
+    }
 
     public Parameter getParameter() {
         return parameter;
@@ -83,9 +83,9 @@ public class Category {
 
     }
 
-    /*public void addProduct(Product product){
+    public void addProduct(Product product){
         product.setCategory(this);
         products.add(product);
 
-    }*/
+    }
 }
