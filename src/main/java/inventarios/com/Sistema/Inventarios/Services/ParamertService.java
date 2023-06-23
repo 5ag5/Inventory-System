@@ -1,6 +1,6 @@
 package inventarios.com.Sistema.Inventarios.Services;
 
-import inventarios.com.Sistema.Inventarios.DTO.ParameterDTO;
+import inventarios.com.Sistema.Inventarios.DTOs.ParameterDTO;
 import inventarios.com.Sistema.Inventarios.Models.Parameter;
 
 import java.util.List;

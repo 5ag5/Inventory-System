@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class User {
+public class UserInventory {
 
     @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
     @GenericGenerator(name="native", strategy = "native")
@@ -25,9 +25,9 @@ public class User {
     @OneToMany(mappedBy = "audit", fetch=FetchType.EAGER)
     private Set<Audit> auditories = new HashSet<>();
 
-    public User(){}
+    public UserInventory(){}
 
-    public User(String login, String lastName, String password, String email, UserType userType) {
+    public UserInventory(String login, String lastName, String password, String email, UserType userType) {
         this.login = login;
         this.lastName = lastName;
         this.password = password;

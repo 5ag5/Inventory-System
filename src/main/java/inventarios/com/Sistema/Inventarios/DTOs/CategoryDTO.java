@@ -1,13 +1,8 @@
-package inventarios.com.Sistema.Inventarios.DTO;
+package inventarios.com.Sistema.Inventarios.DTOs;
 
-import inventarios.com.Sistema.Inventarios.Models.Audit;
 import inventarios.com.Sistema.Inventarios.Models.Category;
 import inventarios.com.Sistema.Inventarios.Models.Parameter;
-import inventarios.com.Sistema.Inventarios.Models.Product;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.util.Set;
 import java.util.stream.Collectors;
 

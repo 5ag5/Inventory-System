@@ -1,9 +1,7 @@
-package inventarios.com.Sistema.Inventarios.DTO;
+package inventarios.com.Sistema.Inventarios.DTOs;
 
 import inventarios.com.Sistema.Inventarios.Models.*;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 public class AuditDTO {
@@ -17,7 +15,7 @@ public class AuditDTO {
     private Category category;
     private Parameter parameter;
     private Product product;
-    private User user;
+    private UserInventory user;
 
     public AuditDTO(Audit audit) {
         this.id = audit.getId();
@@ -73,7 +71,7 @@ public class AuditDTO {
         return product;
     }
 
-    public User getUser() {
+    public UserInventory getUser() {
         return user;
     }
 }

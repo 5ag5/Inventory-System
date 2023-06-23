@@ -1,6 +1,6 @@
-package inventarios.com.Sistema.Inventarios.Services.Implement;
+package inventarios.com.Sistema.Inventarios.Services.Implements;
 
-import inventarios.com.Sistema.Inventarios.DTO.CategoryDTO;
+import inventarios.com.Sistema.Inventarios.DTOs.CategoryDTO;
 import inventarios.com.Sistema.Inventarios.Models.Category;
 import inventarios.com.Sistema.Inventarios.Repositories.CategoryRepository;
 import inventarios.com.Sistema.Inventarios.Services.CategoryService;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryServiceImplement implements CategoryService {
+public class CategoryServiceImplements implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;

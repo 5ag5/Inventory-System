@@ -1,7 +1,7 @@
 package inventarios.com.Sistema.Inventarios.Services;
 
 
-import inventarios.com.Sistema.Inventarios.DTO.CategoryDTO;
+import inventarios.com.Sistema.Inventarios.DTOs.CategoryDTO;
 import inventarios.com.Sistema.Inventarios.Models.Category;
 
 import java.util.List;

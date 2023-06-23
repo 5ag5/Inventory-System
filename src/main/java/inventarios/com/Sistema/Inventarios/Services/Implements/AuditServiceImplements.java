@@ -1,6 +1,6 @@
-package inventarios.com.Sistema.Inventarios.Services.Implement;
+package inventarios.com.Sistema.Inventarios.Services.Implements;
 
-import inventarios.com.Sistema.Inventarios.DTO.AuditDTO;
+import inventarios.com.Sistema.Inventarios.DTOs.AuditDTO;
 import inventarios.com.Sistema.Inventarios.Models.Audit;
 import inventarios.com.Sistema.Inventarios.Repositories.AuditRepository;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AuditServiceImplement implements AuditService {
+public class AuditServiceImplements implements AuditService {
 
     @Autowired
     private AuditRepository auditRepository;

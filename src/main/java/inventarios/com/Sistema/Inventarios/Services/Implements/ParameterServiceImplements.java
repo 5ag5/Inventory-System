@@ -1,6 +1,6 @@
-package inventarios.com.Sistema.Inventarios.Services.Implement;
+package inventarios.com.Sistema.Inventarios.Services.Implements;
 
-import inventarios.com.Sistema.Inventarios.DTO.ParameterDTO;
+import inventarios.com.Sistema.Inventarios.DTOs.ParameterDTO;
 import inventarios.com.Sistema.Inventarios.Models.Parameter;
 import inventarios.com.Sistema.Inventarios.Repositories.ParameterRepository;
 import inventarios.com.Sistema.Inventarios.Services.ParamertService;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ParameterServiceImplement implements ParamertService {
+public class ParameterServiceImplements implements ParamertService {
 
     @Autowired
     private ParameterRepository parameterRepository;

@@ -1,9 +1,7 @@
-package inventarios.com.Sistema.Inventarios.DTO;
+package inventarios.com.Sistema.Inventarios.DTOs;
 
 import inventarios.com.Sistema.Inventarios.Models.*;
 
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import java.util.Set;
 import java.util.stream.Collectors;
 

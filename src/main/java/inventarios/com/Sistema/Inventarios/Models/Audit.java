@@ -27,7 +27,7 @@ public class Audit {
     private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private User user; // Many to One
+    private UserInventory user; // Many to One
 
     public  Audit(){
 
@@ -125,11 +125,11 @@ public class Audit {
         this.product = product;
     }
 
-    public User getUser() {
+    public UserInventory getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserInventory user) {
         this.user = user;
     }
 }
