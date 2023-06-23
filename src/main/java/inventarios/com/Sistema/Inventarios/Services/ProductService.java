@@ -1,4 +1,4 @@
-package inventarios.com.Sistema.Inventarios.Service;
+package inventarios.com.Sistema.Inventarios.Services;
 
 import inventarios.com.Sistema.Inventarios.DTOs.ProductDTO;
 import inventarios.com.Sistema.Inventarios.Models.Product;

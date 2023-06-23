@@ -1,9 +1,9 @@
-package inventarios.com.Sistema.Inventarios.Service.Implements;
+package inventarios.com.Sistema.Inventarios.Services.Implements;
 
 import inventarios.com.Sistema.Inventarios.DTOs.ProductDTO;
 import inventarios.com.Sistema.Inventarios.Models.Product;
 import inventarios.com.Sistema.Inventarios.Repositories.ProductRepository;
-import inventarios.com.Sistema.Inventarios.Service.ProductService;
+import inventarios.com.Sistema.Inventarios.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
