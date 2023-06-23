@@ -1,7 +1,7 @@
 package inventarios.com.Sistema.Inventarios.Models;
 
 public enum NombreTabla {
-    USER,
+    USERINVENTORY,
     PRODUCT,
     CATEGORY,
     PARAMETER

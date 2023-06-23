@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class User {
+public class UserInventory {
 
     @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
     @GenericGenerator(name="native", strategy = "native")
@@ -18,24 +18,37 @@ public class User {
     private String lastName;
     private String password;
     private String email;
+    private boolean status;
     private LocalDate dateRegistered;
     private LocalDate lastRegisteredPassword;
     private UserType userType;
     private int numberOfLoginTries;
-    @OneToMany(mappedBy = "audit", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "userInventory", fetch=FetchType.EAGER)
     private Set<Audit> auditories = new HashSet<>();
 
-    public User(){}
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Parameter parameter;
 
-    public User(String login, String lastName, String password, String email, UserType userType) {
+    public UserInventory(){}
+
+    public UserInventory(String login, String lastName, String password, String email, UserType userType) {
         this.login = login;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+        this.status = true;
         this.dateRegistered = LocalDate.now();
         this.lastRegisteredPassword = LocalDate.now();
         this.userType = userType;
         this.numberOfLoginTries = 0;
+    }
+
+    public Parameter getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(Parameter parameter) {
+        this.parameter = parameter;
     }
 
     public Long getId() {
@@ -98,6 +111,14 @@ public class User {
         return userType;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public void setUserType(UserType userType) {
         this.userType = userType;
     }
@@ -118,8 +139,12 @@ public class User {
         this.auditories = auditories;
     }
 
+
     public void addAudit(Audit audit){
         audit.setUser(this);
         auditories.add(audit);
     }
+
+
+
 }
