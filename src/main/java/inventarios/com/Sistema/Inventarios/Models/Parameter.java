@@ -3,6 +3,7 @@ package inventarios.com.Sistema.Inventarios.Models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,15 +16,14 @@ public class Parameter {
     private  boolean parameterStatus;
     private String nameParameter;
     private String  valueParameter;
-    @OneToMany(mappedBy = "audit", fetch = FetchType.EAGER)
-    private Set<Audit> audits;
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    private Set<Category> categories;
-    /*@OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private Set<Product> products;*/
-
-    /*@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<User> users;*/
+    @OneToMany(mappedBy = "parameter", fetch = FetchType.EAGER)
+    private Set<Audit> audits = new HashSet<>();
+    @OneToMany(mappedBy = "parameter", fetch = FetchType.EAGER)
+    private Set<Category> categories = new HashSet<>();
+    @OneToMany(mappedBy = "parameter", fetch = FetchType.EAGER)
+    private Set<Product> products = new HashSet<>();
+    @OneToMany(mappedBy = "parameter", fetch = FetchType.EAGER)
+    private Set<UserInventory> userInventories = new HashSet<>();
 
     public Parameter(){
 
@@ -92,7 +92,7 @@ public class Parameter {
         this.categories = categories;
     }
 
-    /*public Set<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
@@ -100,13 +100,13 @@ public class Parameter {
         this.products = products;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<UserInventory> getUsers() {
+        return userInventories;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }*/
+    public void setUsers(Set<UserInventory> userInventories) {
+        this.userInventories = userInventories;
+    }
 
     public void addAudit(Audit audit){
         audit.setParameter(this);
@@ -114,20 +114,15 @@ public class Parameter {
     }
 
 
-   /* public void addProduct(Product product){
+   public void addProduct(Product product){
         product.setParameter(this);
         products.add(product);
-    }*
+    }
 
 
     public void addCategory(Category category){
         category.setParameter(this);
         categories.add(category);
     }
-
-    /*public void addAudit(User user){
-        user.setParameter(this);
-        users.add(user);
-    }*/
 
 }
