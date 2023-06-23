@@ -18,12 +18,16 @@ public class UserInventory {
     private String lastName;
     private String password;
     private String email;
+    private boolean status;
     private LocalDate dateRegistered;
     private LocalDate lastRegisteredPassword;
     private UserType userType;
     private int numberOfLoginTries;
-    @OneToMany(mappedBy = "audit", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "userInventory", fetch=FetchType.EAGER)
     private Set<Audit> auditories = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Parameter parameter;
 
     public UserInventory(){}
 
@@ -32,12 +36,21 @@ public class UserInventory {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+
+        this.status = true;
         this.dateRegistered = LocalDate.now();
         this.lastRegisteredPassword = LocalDate.now();
         this.userType = userType;
         this.numberOfLoginTries = 0;
     }
 
+    public Parameter getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(Parameter parameter) {
+        this.parameter = parameter;
+    }
     public Long getId() {
         return id;
     }
@@ -96,6 +109,15 @@ public class UserInventory {
 
     public UserType getUserType() {
         return userType;
+    }
+
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public void setUserType(UserType userType) {

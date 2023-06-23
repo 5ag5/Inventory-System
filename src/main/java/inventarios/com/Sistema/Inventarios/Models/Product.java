@@ -23,10 +23,14 @@ public class Product {
     private int maximumStock;
     private boolean includesIVA;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="category_ID")
+    @JoinColumn(name="category_id")
     private Category category;
 
-    @OneToMany(mappedBy ="audit", fetch=FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="parameter_id")
+    private Parameter parameter;
+
+    @OneToMany(mappedBy ="product", fetch=FetchType.EAGER)
     private Set<Audit> auditories = new HashSet<>();
 
     public Product(){}
@@ -56,6 +60,14 @@ public class Product {
 
     public void setDescriptionProduct(String descriptionProduct) {
         this.descriptionProduct = descriptionProduct;
+    }
+
+    public Parameter getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(Parameter parameter) {
+        this.parameter = parameter;
     }
 
     public boolean isStatusProduct() {

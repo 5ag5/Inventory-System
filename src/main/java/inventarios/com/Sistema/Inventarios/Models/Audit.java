@@ -1,12 +1,9 @@
 package inventarios.com.Sistema.Inventarios.Models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parent;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Entity
@@ -23,11 +20,12 @@ public class Audit {
     private NombreTabla nombreTabla;
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;  // Many to One
-    private Parameter parameter;
-    private Product product;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    private UserInventory user; // Many to One
+    private Parameter parameter;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Product product;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private UserInventory userInventory; // Many to One
 
     public  Audit(){
 
@@ -40,10 +38,7 @@ public class Audit {
         this.idTabla=idTabla;
         this.idUsuario=idUsuario;
         this.nombreTabla=nombreTabla;
-
     }
-
-
 
     public Long getId() {
         return id;
@@ -126,10 +121,10 @@ public class Audit {
     }
 
     public UserInventory getUser() {
-        return user;
+        return userInventory;
     }
 
-    public void setUser(UserInventory user) {
-        this.user = user;
+    public void setUser(UserInventory userInventory) {
+        this.userInventory = userInventory;
     }
 }
