@@ -36,6 +36,7 @@ public class UserInventory {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+
         this.status = true;
         this.dateRegistered = LocalDate.now();
         this.lastRegisteredPassword = LocalDate.now();
@@ -50,7 +51,6 @@ public class UserInventory {
     public void setParameter(Parameter parameter) {
         this.parameter = parameter;
     }
-
     public Long getId() {
         return id;
     }
@@ -111,6 +111,7 @@ public class UserInventory {
         return userType;
     }
 
+
     public boolean isStatus() {
         return status;
     }
@@ -139,12 +140,8 @@ public class UserInventory {
         this.auditories = auditories;
     }
 
-
     public void addAudit(Audit audit){
         audit.setUser(this);
         auditories.add(audit);
     }
-
-
-
 }

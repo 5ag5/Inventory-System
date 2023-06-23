@@ -1,13 +1,8 @@
 package inventarios.com.Sistema.Inventarios.DTOs;
-
-import inventarios.com.Sistema.Inventarios.Models.ActionAudit;
-import inventarios.com.Sistema.Inventarios.Models.Audit;
-import inventarios.com.Sistema.Inventarios.Models.NombreTabla;
-
+import inventarios.com.Sistema.Inventarios.Models.*;
 import java.time.LocalDate;
 
 public class AuditDTO {
-
     private Long id;
     private ActionAudit actionAudit;
     private String direccionID;
@@ -16,8 +11,41 @@ public class AuditDTO {
     private Long idUsuario;
     private NombreTabla nombreTabla;
 
-    public AuditDTO(){}
-
     public AuditDTO(Audit audit) {
+        this.id = audit.getId();
+        this.actionAudit = audit.getActionAudit();
+        this.direccionID = audit.getDireccionID();
+        this.fechaAuditoria = audit.getFechaAuditoria();
+        this.idTabla = audit.getIdTabla();
+        this.idUsuario = audit.getIdUsuario();
+        this.nombreTabla = audit.getNombreTabla();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public ActionAudit getActionAudit() {
+        return actionAudit;
+    }
+
+    public String getDireccionID() {
+        return direccionID;
+    }
+
+    public LocalDate getFechaAuditoria() {
+        return fechaAuditoria;
+    }
+
+    public Long getIdTabla() {
+        return idTabla;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public NombreTabla getNombreTabla() {
+        return nombreTabla;
     }
 }

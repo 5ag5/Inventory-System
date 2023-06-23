@@ -16,6 +16,7 @@ public class Parameter {
     private  boolean parameterStatus;
     private String nameParameter;
     private String  valueParameter;
+
     @OneToMany(mappedBy = "parameter", fetch = FetchType.EAGER)
     private Set<Audit> audits = new HashSet<>();
     @OneToMany(mappedBy = "parameter", fetch = FetchType.EAGER)
@@ -52,7 +53,7 @@ public class Parameter {
         this.parameterDescription = parameterDescription;
     }
 
-    public boolean isParameterStatus() {
+    public boolean getParameterStatus() {
         return parameterStatus;
     }
 
