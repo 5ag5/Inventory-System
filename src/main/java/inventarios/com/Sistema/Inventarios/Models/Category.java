@@ -18,7 +18,7 @@ public class Category {
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private Set<Audit> audits;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private Set<Product> products; //One to Many
 
     public Category() {

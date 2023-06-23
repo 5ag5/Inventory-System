@@ -18,7 +18,7 @@ public class CategoryDTO {
 
     private Set<AuditDTO> audits;
 
-   // private Set<ProductDTO> products; //One to Many
+   private Set<ProductDTO> products; //One to Many
 
     public CategoryDTO(Category category) {
         this.id = category.getId();
@@ -26,7 +26,7 @@ public class CategoryDTO {
         this.stateCategory = category.getStateCategory();
         this.parameter = category.getParameter();
         this.audits = category.getAudits().stream().map(audit-> new AuditDTO(audit)).collect(Collectors.toSet());
-       // this.products =category.getProducts().stream().map(product -> new ProductDTO(product)).collect(Collectors.toSet());
+       this.products =category.getProducts().stream().map(product -> new ProductDTO(product)).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -49,7 +49,7 @@ public class CategoryDTO {
         return audits;
     }
 
-   /* public Set<ProductDTO> getProducts() {
+   public Set<ProductDTO> getProducts() {
         return products;
-    }*/
+    }
 }
