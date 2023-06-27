@@ -4,6 +4,7 @@ import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Repositories.UserInventoryRepository;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,5 +39,15 @@ public class UserInventoryServiceImplements implements UserInventoryService {
     @Override
     public List<UserInventory> findAllUsers() {
         return userInventoryRepository.findAll();
+    }
+
+    @Override
+    public UserInventory findByEmail(String email) {
+        return userInventoryRepository.findByEmail(email);
+    }
+
+    @Override
+    public UserInventory getAuthenticatedUser(Authentication authentication) {
+        return userInventoryRepository.findByLogin(authentication.getName());
     }
 }

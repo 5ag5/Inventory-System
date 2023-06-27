@@ -2,6 +2,7 @@ package inventarios.com.Sistema.Inventarios.Services.Implements;
 
 import inventarios.com.Sistema.Inventarios.DTOs.ParameterDTO;
 import inventarios.com.Sistema.Inventarios.Models.Parameter;
+import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Repositories.ParameterRepository;
 import inventarios.com.Sistema.Inventarios.Services.ParamertService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +31,6 @@ public class ParameterServiceImplements implements ParamertService {
     public void saveParameter(Parameter parameter) {
         parameterRepository.save(parameter);
     }
+
+
 }
