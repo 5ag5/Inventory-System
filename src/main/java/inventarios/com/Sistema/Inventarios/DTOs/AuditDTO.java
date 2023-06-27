@@ -9,7 +9,7 @@ public class AuditDTO {
     private LocalDate fechaAuditoria;
     private Long idTabla;
     private Long idUsuario;
-    private NombreTabla nombreTabla;
+    private tableNames tableNames;
 
     public AuditDTO(Audit audit) {
         this.id = audit.getId();
@@ -18,7 +18,7 @@ public class AuditDTO {
         this.fechaAuditoria = audit.getFechaAuditoria();
         this.idTabla = audit.getIdTabla();
         this.idUsuario = audit.getIdUsuario();
-        this.nombreTabla = audit.getNombreTabla();
+        this.tableNames = audit.getNombreTabla();
     }
 
     public Long getId() {
@@ -45,7 +45,7 @@ public class AuditDTO {
         return idUsuario;
     }
 
-    public NombreTabla getNombreTabla() {
-        return nombreTabla;
+    public tableNames getNombreTabla() {
+        return tableNames;
     }
 }

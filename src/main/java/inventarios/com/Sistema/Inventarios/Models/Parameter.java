@@ -30,9 +30,9 @@ public class Parameter {
 
     }
 
-    public Parameter(String parameterDescription, boolean parameterStatus, String nameParameter, String valueParameter) {
+    public Parameter(String parameterDescription, String nameParameter, String valueParameter) {
         this.parameterDescription = parameterDescription;
-        this.parameterStatus = parameterStatus;
+        this.parameterStatus = true;
         this.nameParameter = nameParameter;
         this.valueParameter = valueParameter;
     }
