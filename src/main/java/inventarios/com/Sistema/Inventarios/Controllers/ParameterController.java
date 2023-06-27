@@ -1,10 +1,8 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
-import inventarios.com.Sistema.Inventarios.Models.Parameter;
 import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Services.ParamertService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
-import inventarios.com.Sistema.Inventarios.Utilities.ParameterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

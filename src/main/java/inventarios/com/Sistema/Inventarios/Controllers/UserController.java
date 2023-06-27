@@ -3,6 +3,7 @@ package inventarios.com.Sistema.Inventarios.Controllers;
 import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Models.UserType;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
+import inventarios.com.Sistema.Inventarios.Utilities.UserInventoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,6 @@ public class UserController {
     @PostMapping("/api/users")
     public ResponseEntity<Object> register(@RequestParam String login,
                                            @RequestParam  String lastName,
-                                           @RequestParam String password,
                                            @RequestParam String email,
                                            @RequestParam UserType userType){
         if(login.isBlank()){
@@ -29,21 +29,6 @@ public class UserController {
         }
         if(lastName.isBlank()){
             return new ResponseEntity<>("The last name can't be empty", HttpStatus.FORBIDDEN);
-        }
-        if(password.isBlank()){
-            return new ResponseEntity<>("The password can't be empty", HttpStatus.FORBIDDEN);
-        }
-        if(password.length()<5 || password.length()>8){
-            return new ResponseEntity<>("The password cannot be less than 5 or more than 8 characters long.", HttpStatus.FORBIDDEN);
-        }
-        if(!password.matches(".*[0-9].*")){
-            return new ResponseEntity<>("The password must contain at least one numeral.", HttpStatus.FORBIDDEN);
-        }
-        if(!password.matches(".*[A-Z].*")){
-            return new ResponseEntity<>("The password must contain at least one capital letter.", HttpStatus.FORBIDDEN);
-        }
-        if(!password.matches(".*[a-z].*")){
-            return new ResponseEntity<>("The password must contain at least one lowercase letter.", HttpStatus.FORBIDDEN);
         }
         if(email.isBlank()){
             return new ResponseEntity<>("The password can't be empty", HttpStatus.FORBIDDEN);
@@ -60,7 +45,7 @@ public class UserController {
         if(userType.equals(null)){
             return new ResponseEntity<>("The user type can't be empty", HttpStatus.FORBIDDEN);
         }
-        UserInventory userInventory= new UserInventory(login,lastName, passwordEncoder.encode(password),email,userType);
+        UserInventory userInventory= new UserInventory(login,lastName, passwordEncoder.encode(UserInventoryUtils.generateRandomPassword(8)),email,userType);
         userInventoryService.inputUser(userInventory);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
