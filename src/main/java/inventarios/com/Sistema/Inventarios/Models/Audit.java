@@ -17,7 +17,7 @@ public class Audit {
     private LocalDate fechaAuditoria;
     private Long idTabla;
     private Long idUsuario;
-    private NombreTabla nombreTabla;
+    private tableNames tableNames;
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;  // Many to One
     @ManyToOne(fetch = FetchType.EAGER)
@@ -31,13 +31,13 @@ public class Audit {
 
     }
 
-    public Audit(ActionAudit actionAudit, String direccionID,LocalDate fechaAuditoria,  Long idTabla, Long idUsuario, NombreTabla nombreTabla) {
+    public Audit(ActionAudit actionAudit, String direccionID,LocalDate fechaAuditoria,  Long idTabla, Long idUsuario, tableNames tableNames) {
         this.actionAudit=actionAudit;
         this.direccionID=direccionID;
         this.fechaAuditoria=fechaAuditoria;
         this.idTabla=idTabla;
         this.idUsuario=idUsuario;
-        this.nombreTabla=nombreTabla;
+        this.tableNames = tableNames;
     }
 
     public Long getId() {
@@ -88,12 +88,12 @@ public class Audit {
         this.idUsuario = idUsuario;
     }
 
-    public NombreTabla getNombreTabla() {
-        return nombreTabla;
+    public tableNames getNombreTabla() {
+        return tableNames;
     }
 
-    public void setNombreTabla(NombreTabla nombreTabla) {
-        this.nombreTabla = nombreTabla;
+    public void setNombreTabla(tableNames tableNames) {
+        this.tableNames = tableNames;
     }
 
     public Category getCategory() {
