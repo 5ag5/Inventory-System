@@ -1,5 +1,6 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
+
 import inventarios.com.Sistema.Inventarios.Models.*;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
@@ -82,4 +83,5 @@ public class ParameterController {
         userTemp.addAudit(auditTemp);
         userInventoryService.modifyUser(userTemp);
         auditService.saveAudit(auditTemp);     }
+
 }
