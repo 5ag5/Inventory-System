@@ -40,8 +40,9 @@ AuditService auditService;
                 tableNames.CATEGORY
         );
 
-        auditService.saveAudit(auditTemp);
-    }
+        userTemp.addAudit(auditTemp);
+        userInventoryService.modifyUser(userTemp);
+        auditService.saveAudit(auditTemp);     }
 
     private void registroModificarCategory(String login) throws UnknownHostException {
         UserInventory userTemp = userInventoryService.findUser(login);
@@ -55,8 +56,9 @@ AuditService auditService;
                 tableNames.CATEGORY
         );
 
-        auditService.saveAudit(auditTemp);
-    }
+        userTemp.addAudit(auditTemp);
+        userInventoryService.modifyUser(userTemp);
+        auditService.saveAudit(auditTemp);     }
 
     private void registroBorrarCategory(String login) throws UnknownHostException {
         UserInventory userTemp = userInventoryService.findUser(login);
@@ -70,9 +72,8 @@ AuditService auditService;
                 tableNames.CATEGORY
         );
 
+        userTemp.addAudit(auditTemp);
+        userInventoryService.modifyUser(userTemp);
         auditService.saveAudit(auditTemp);
     }
-
-
-
 }

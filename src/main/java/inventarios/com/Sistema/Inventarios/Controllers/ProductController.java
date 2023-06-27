@@ -39,6 +39,8 @@ public class ProductController {
                 tableNames.PRODUCT
         );
 
+        user.addAudit(auditTemp);
+        userInventoryService.modifyUser(user);
         auditService.saveAudit(auditTemp);
     }
 
@@ -53,6 +55,10 @@ public class ProductController {
                 user.getId(),
                 tableNames.PRODUCT
         );
+
+        user.addAudit(auditTemp);
+        userInventoryService.modifyUser(user);
+        auditService.saveAudit(auditTemp);
     }
 
     private void deleteProductAudit(String login) throws UnknownHostException{
@@ -66,6 +72,10 @@ public class ProductController {
                 user.getId(),
                 tableNames.PRODUCT
         );
+
+        user.addAudit(auditTemp);
+        userInventoryService.modifyUser(user);
+        auditService.saveAudit(auditTemp);
     }
 
 }
