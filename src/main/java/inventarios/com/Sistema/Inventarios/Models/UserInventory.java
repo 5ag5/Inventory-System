@@ -21,6 +21,7 @@ public class UserInventory {
     private boolean status;
     private LocalDate dateRegistered;
     private LocalDate lastRegisteredPassword;
+    @Enumerated(EnumType.STRING)
     private UserType userType;
     private int numberOfLoginTries;
     @OneToMany(mappedBy = "userInventory", fetch=FetchType.EAGER)

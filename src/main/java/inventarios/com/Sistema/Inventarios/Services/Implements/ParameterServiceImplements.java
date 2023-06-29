@@ -2,9 +2,8 @@ package inventarios.com.Sistema.Inventarios.Services.Implements;
 
 import inventarios.com.Sistema.Inventarios.DTOs.ParameterDTO;
 import inventarios.com.Sistema.Inventarios.Models.Parameter;
-import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Repositories.ParameterRepository;
-import inventarios.com.Sistema.Inventarios.Services.ParamertService;
+import inventarios.com.Sistema.Inventarios.Services.ParameterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ParameterServiceImplements implements ParamertService {
+public class ParameterServiceImplements implements ParameterService {
 
     @Autowired
     private ParameterRepository parameterRepository;
@@ -22,9 +21,14 @@ public class ParameterServiceImplements implements ParamertService {
         return parameterRepository.findById(id).orElse(null);
     }
 
+    public Parameter findParameterByName(String nameParameter){
+        return parameterRepository.findBynameParameter(nameParameter);
+    }
+
     @Override
     public List<ParameterDTO> getAllParameterDTO() {
-        return parameterRepository.findAll().stream().map(parameter -> new ParameterDTO(parameter)).collect(Collectors.toList());
+        List<ParameterDTO> getAllParameters = parameterRepository.findAll().stream().map(parameter -> new ParameterDTO(parameter)).collect(Collectors.toList());
+        return getAllParameters.stream().filter(element -> element.isParameterStatus()).collect(Collectors.toList());
     }
 
     @Override
