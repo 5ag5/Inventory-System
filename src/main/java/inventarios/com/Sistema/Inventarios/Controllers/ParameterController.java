@@ -102,7 +102,7 @@ public class ParameterController {
         parameterTemp.setParameterStatus(false);
         parameterService.saveParameter(parameterTemp);
 
-        AudirtRegisterDeleteParameter(userTemp.getLogin());
+        AuditRegisterDeleteParameter(userTemp.getLogin());
         return new ResponseEntity<>("Parameter Erased", HttpStatus.ACCEPTED);
     }
 
@@ -141,7 +141,7 @@ public class ParameterController {
         userInventoryService.modifyUser(userTemp);
         auditService.saveAudit(auditTemp);     }
 
-    private void AudirtRegisterDeleteParameter(String login) throws UnknownHostException {
+    private void AuditRegisterDeleteParameter(String login) throws UnknownHostException {
         UserInventory userTemp = userInventoryService.findUser(login);
 
         Audit auditTemp = new Audit(

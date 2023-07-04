@@ -1,15 +1,18 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
+import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.ProductService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class GraficiosControlador {
@@ -21,6 +24,77 @@ public class GraficiosControlador {
     @Autowired
     ProductService productService;
 
+    @GetMapping("api/graphs/UserGraphsCount")
+    public String [][]  listaPrueba(@RequestParam String nameArgument){
+
+        List<UserInventory> namesCategories =  userInventoryService.findAllUsers();
+        Set <String> namesArgument = new HashSet<>();
+        List<String> elementsArguments = new ArrayList<>();
+        int sizeArray =0;
+
+        switch(nameArgument){
+            case "Date Registered":
+                for(UserInventory userTemp:namesCategories) {
+                    namesArgument.add(String.valueOf(userTemp.getDateRegistered()));
+                    elementsArguments.add(String.valueOf(userTemp.getDateRegistered()));
+                }
+            break;
+            case "status":
+                for(UserInventory userTemp:namesCategories) {
+                    namesArgument.add(String.valueOf(userTemp.isStatus()));
+                    elementsArguments.add(String.valueOf(userTemp.isStatus()));
+                }
+                break;
+            case "Last Registered Date":
+                for(UserInventory userTemp:namesCategories) {
+                    namesArgument.add(String.valueOf(userTemp.getLastRegisteredPassword()));
+                    elementsArguments.add(String.valueOf(userTemp.getLastRegisteredPassword()));
+                }
+                break;
+            case "User Type":
+                for(UserInventory userTemp:namesCategories) {
+                    namesArgument.add(String.valueOf(userTemp.getUserType()));
+                    elementsArguments.add(String.valueOf(userTemp.getUserType()));
+                }
+                break;
+        }
+
+        if(namesArgument.size() == 1) {
+            sizeArray = namesArgument.size()+1;
+        }else{
+            sizeArray = namesArgument.size();
+        }
+
+        String[][] arrayAnswer = new String[sizeArray][2];
+
+        arrayAnswer[0][0] = nameArgument;
+        arrayAnswer[0][1] = "count";
+
+        ArrayList <String> arrayTemp = new ArrayList<>(namesArgument);
+
+        arrayAnswer[1][0] = arrayTemp.get(0);
+
+        for(int i=1; i < arrayTemp.size();i++){
+                arrayAnswer[i][0] = arrayTemp.get(i);
+                arrayAnswer[i][1] = "0";
+        }
+
+        if(arrayAnswer[1][1] == null){
+            arrayAnswer[1][1] = "0";
+        }
+
+        for(String element: elementsArguments){
+            for(int i=1; i < arrayAnswer.length;i++) {
+                if(arrayAnswer[i][0].equals(element)){
+                    arrayAnswer[i][1] = String.valueOf(Integer.parseInt(arrayAnswer[i][1]) +1);
+                }
+            }
+        }
+
+        return arrayAnswer;
+    }
+
+    
 
     /*
     @GetMapping("/api/graficos/graficoLineas")

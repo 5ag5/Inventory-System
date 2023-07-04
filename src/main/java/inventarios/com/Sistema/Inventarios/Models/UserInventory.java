@@ -37,7 +37,6 @@ public class UserInventory {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
-
         this.status = true;
         this.dateRegistered = LocalDate.now();
         this.lastRegisteredPassword = LocalDate.now();
