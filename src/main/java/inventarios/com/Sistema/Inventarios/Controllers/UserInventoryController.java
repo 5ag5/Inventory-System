@@ -5,11 +5,12 @@ import inventarios.com.Sistema.Inventarios.Models.*;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.EmailService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
-import inventarios.com.Sistema.Inventarios.Utilities.UserInventoryUtils;
+import inventarios.com.Sistema.Inventarios.Utils.UserInventoryUtils;
 import inventarios.com.Sistema.Inventarios.Utils.LogType;
 import inventarios.com.Sistema.Inventarios.Utils.UtilesLog;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ import java.time.LocalDate;
 
 @RestController
 public class UserInventoryController {
+
+    private static final Logger logger = LogManager.getLogger(UserInventoryController.class);
+
     @Autowired
     UserInventoryService userInventoryService;
 
@@ -37,8 +41,6 @@ public class UserInventoryController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    //private static final Logger logger = LogManager.getLogger(UserInventoryController.class);
 
     @PostMapping("api/userInventory/loginRegister")
     public ResponseEntity<Object> registerLogin(@RequestParam String login) throws UnknownHostException {
@@ -56,13 +58,16 @@ public class UserInventoryController {
         userInventoryService.modifyUser(userTemp);
         auditService.saveAudit(auditLogin);
 
-        UtilesLog.registratinInfo(UserInventory.class, LogType.INFO,"Usuario Logeado");
+        /*UtilesLog.registratinInfo(UserInventory.class, LogType.INFO,"Usuario Logeado");
         UtilesLog.registratinInfo(UserInventory.class, LogType.DEBUG,"Usuario Logeado");
         UtilesLog.registratinInfo(UserInventory.class, LogType.WARNING,"Usuario Logeado");
         UtilesLog.registratinInfo(UserInventory.class, LogType.ERROR,"Usuario Logeado");
         UtilesLog.registratinInfo(UserInventory.class, LogType.FATAL,"Usuario Logeado");
+         */
 
         //logger.debug("esta funcionando");
+
+        logger.info("ESTO FUNCIONA");
 
         return new ResponseEntity<>("login registration complete",HttpStatus.ACCEPTED);
     }

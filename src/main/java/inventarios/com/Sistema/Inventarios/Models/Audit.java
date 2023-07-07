@@ -12,6 +12,8 @@ public class Audit {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     private ActionAudit actionAudit;
     private String direccionID;
     private LocalDate fechaAuditoria;

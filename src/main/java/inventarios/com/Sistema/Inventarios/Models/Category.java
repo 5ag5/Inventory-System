@@ -3,6 +3,7 @@ package inventarios.com.Sistema.Inventarios.Models;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,10 +17,9 @@ public class Category {
     @ManyToOne(fetch = FetchType.EAGER)
     private Parameter parameter;
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    private Set<Audit> audits;
-
+    private Set<Audit> audits = new HashSet<>();
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    private Set<Product> products; //One to Many
+    private Set<Product> products = new HashSet<>(); //One to Many
 
     public Category() {
     }
