@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface UserInventoryService {
+    public static final int MAX_FAILED_ATTEMPTS = 3;
+
     void inputUser(UserInventory userInventory);
 
     void modifyUser(UserInventory userInventory);
@@ -17,5 +19,7 @@ public interface UserInventoryService {
     UserInventory findByEmail(String email);
 
     UserInventory getAuthenticatedUser(Authentication authentication);
+
+
 
 }

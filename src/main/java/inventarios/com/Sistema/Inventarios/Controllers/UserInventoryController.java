@@ -1,7 +1,9 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
+import inventarios.com.Sistema.Inventarios.DTOs.EmailDTO;
 import inventarios.com.Sistema.Inventarios.Models.*;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
+import inventarios.com.Sistema.Inventarios.Services.EmailService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
 import inventarios.com.Sistema.Inventarios.Utilities.UserInventoryUtils;
 import inventarios.com.Sistema.Inventarios.Utils.LogType;
@@ -29,6 +31,9 @@ public class UserInventoryController {
 
     @Autowired
     AuditService auditService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -69,6 +74,7 @@ public class UserInventoryController {
                                            @RequestParam  String lastName,
                                            @RequestParam String email,
                                            @RequestParam UserType userType){
+        String passwordBeforeEncrypting=UserInventoryUtils.generateRandomPassword(8);
         if(login.isBlank()){
             return new ResponseEntity<>("The name can't be empty", HttpStatus.FORBIDDEN);
         }
@@ -90,9 +96,11 @@ public class UserInventoryController {
         if(userType.equals(null)){
             return new ResponseEntity<>("The user type can't be empty", HttpStatus.FORBIDDEN);
         }
-        UserInventory userInventory= new UserInventory(login,lastName, passwordEncoder.encode(UserInventoryUtils.generateRandomPassword(8)),email,userType);
+        UserInventory userInventory= new UserInventory(login,lastName, passwordEncoder.encode(passwordBeforeEncrypting),email,userType);
         userInventoryService.inputUser(userInventory);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        EmailDTO emailDTO= new EmailDTO(passwordBeforeEncrypting, email);
+        emailService.sendEmail(emailDTO);
+        return new ResponseEntity<>("Se envio la contraseña a su correo "+ passwordBeforeEncrypting,HttpStatus.CREATED);
     }
 
 
@@ -119,6 +127,31 @@ public class UserInventoryController {
         userInventoryService.inputUser(userInventory);
         return new ResponseEntity<>("password has been changed", HttpStatus.OK);
     }
+
+    @PatchMapping("/api/users/validateAttempts ")
+    public ResponseEntity<Object> validateAttempts(String login){
+        UserInventory userInventory= userInventoryService.findUser(login);
+        if(userInventory.getNumberOfLoginTries()>=3){
+            userInventory.setStatus(false);
+            userInventoryService.inputUser(userInventory);
+            return  new ResponseEntity<>("A exceeded the allowed attempts. Your account has been blocked.", HttpStatus.FORBIDDEN);
+
+        }
+        return  new ResponseEntity<>("Failed login attempts." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("/api/users/activateAccount ")
+    public ResponseEntity<Object> activateAccount(String login){
+        UserInventory userInventory= userInventoryService.findUser(login);
+        if(!userInventory.isStatus()){
+            userInventory.setStatus(true);
+            userInventoryService.inputUser(userInventory);
+            return  new ResponseEntity<>("The account has been activated", HttpStatus.FORBIDDEN);
+
+        }
+        return  new ResponseEntity<>("The account is active." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
+    }
+
 
     //====================================AUDIT METHODS===============================//♠
     private void registerModifyUser(String login) throws UnknownHostException {

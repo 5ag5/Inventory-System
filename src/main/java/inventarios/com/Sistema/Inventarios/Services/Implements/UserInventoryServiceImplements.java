@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserInventoryServiceImplements implements UserInventoryService {
+
+
     @Autowired
     UserInventoryRepository userInventoryRepository;
 
@@ -50,4 +54,7 @@ public class UserInventoryServiceImplements implements UserInventoryService {
     public UserInventory getAuthenticatedUser(Authentication authentication) {
         return userInventoryRepository.findByLogin(authentication.getName());
     }
+
+
+
 }
