@@ -4,6 +4,12 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+dependencyManagement {
+	imports {
+		mavenBom 'org.apache.logging.log4j:log4j-bom:2.20.0'
+	}
+}
+
 group = 'inventarios.com'
 version = '0.0.1-SNAPSHOT'
 
@@ -15,17 +21,26 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	all*.exclude group:'org.springframework.boot', module:'spring-boot-starter-logging'
+}
+
 dependencies {
+	implementation platform('org.apache.logging.log4j:log4j-bom:2.20.0')
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
-	implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
+	implementation 'org.apache.logging.log4j:log4j-api'
+	implementation 'org.apache.logging.log4j:log4j-core'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+

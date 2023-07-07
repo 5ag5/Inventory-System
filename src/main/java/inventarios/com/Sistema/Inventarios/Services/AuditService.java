@@ -11,6 +11,8 @@ public interface AuditService {
 
     List<AuditDTO> getAllAuditDTO();
 
+    List<Audit> findAllAudit();
+
     void saveAudit(Audit audit);
 
 

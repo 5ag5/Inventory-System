@@ -1,16 +1,16 @@
 package inventarios.com.Sistema.Inventarios;
 
 import inventarios.com.Sistema.Inventarios.Models.*;
-import inventarios.com.Sistema.Inventarios.Repositories.CategoryRepository;
-import inventarios.com.Sistema.Inventarios.Repositories.ParameterRepository;
-import inventarios.com.Sistema.Inventarios.Repositories.ProductRepository;
-import inventarios.com.Sistema.Inventarios.Repositories.UserInventoryRepository;
+import inventarios.com.Sistema.Inventarios.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.net.InetAddress;
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class SistemaInventariosApplication {
@@ -27,7 +27,8 @@ public class SistemaInventariosApplication {
 public CommandLineRunner initData(UserInventoryRepository userInventoryRepository,
 								  ParameterRepository parameterRepository,
 								  ProductRepository productRepository,
-								  CategoryRepository categoryRepository){
+								  CategoryRepository categoryRepository,
+								  AuditRepository auditRepository){
  return (args) -> {
 	UserInventory user1 = new UserInventory("user11","Gonzalez", passwordEncoder.encode("user123"),"correo1@gmail.com", UserType.ADMIN);
 	UserInventory user2 = new UserInventory("user22","Garcia",passwordEncoder.encode("user456"),"correo2@gmail.com",UserType.CASHIER);
@@ -67,6 +68,72 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 parameterRepository.save(parameter1);
 	 parameterRepository.save(parameter2);
 	 parameterRepository.save(parameter3);
+
+	 Audit audit1 = new Audit(
+			 ActionAudit.UPDATE,
+			 String.valueOf(InetAddress.getLocalHost()),
+			 LocalDate.now(),
+			 tableNames.USERINVENTORY.getIdTable(),
+			 0L,
+			 tableNames.USERINVENTORY);
+
+
+	 Audit audit2 = new Audit(
+			 ActionAudit.INSERT,
+			 String.valueOf(InetAddress.getLocalHost()),
+			 LocalDate.now(),
+			 tableNames.USERINVENTORY.getIdTable(),
+			 0L,
+			 tableNames.USERINVENTORY);
+
+	 Audit audit3 = new Audit(
+			 ActionAudit.DELETE,
+			 String.valueOf(InetAddress.getLocalHost()),
+			 LocalDate.now(),
+			 tableNames.USERINVENTORY.getIdTable(),
+			 0L,
+			 tableNames.USERINVENTORY);
+
+	 Audit audit4 = new Audit(
+			 ActionAudit.EXIT,
+			 String.valueOf(InetAddress.getLocalHost()),
+			 LocalDate.now(),
+			 tableNames.USERINVENTORY.getIdTable(),
+			 0L,
+			 tableNames.USERINVENTORY);
+
+	 Audit audit5 = new Audit(
+			 ActionAudit.LOGIN,
+			 String.valueOf(InetAddress.getLocalHost()),
+			 LocalDate.now(),
+			 tableNames.USERINVENTORY.getIdTable(),
+			 0L,
+			 tableNames.USERINVENTORY);
+
+	 Audit audit6 = new Audit(
+			 ActionAudit.LOGIN,
+			 String.valueOf(InetAddress.getLocalHost()),
+			 LocalDate.now(),
+			 tableNames.USERINVENTORY.getIdTable(),
+			 0L,
+			 tableNames.USERINVENTORY);
+
+	auditRepository.save(audit1);
+	auditRepository.save(audit2);
+	auditRepository.save(audit3);
+	auditRepository.save(audit4);
+	auditRepository.save(audit5);
+	auditRepository.save(audit6);
+
+
+	user1.addAudit(audit1);
+	user1.addAudit(audit2);
+	user1.addAudit(audit3);
+	user1.addAudit(audit4);
+	user1.addAudit(audit5);
+	user1.addAudit(audit6);
+
+	userInventoryRepository.save(user1);
 
  };
 }
