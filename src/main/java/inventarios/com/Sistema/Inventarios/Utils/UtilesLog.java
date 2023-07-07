@@ -3,7 +3,7 @@ package inventarios.com.Sistema.Inventarios.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UtilesLog {
+public final class UtilesLog {
 
     private static Logger log = LogManager.getLogger(UtilesLog.class);
 

@@ -26,6 +26,11 @@ public class AuditServiceImplements implements AuditService {
     }
 
     @Override
+    public List<Audit> findAllAudit(){
+        return auditRepository.findAll();
+    }
+
+    @Override
     public void saveAudit(Audit audit) {
         auditRepository.save(audit);
     }

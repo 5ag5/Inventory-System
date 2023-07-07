@@ -6,5 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface ParameterRepository extends JpaRepository<Parameter, Long> {
-
+    Parameter findBynameParameter(String nameParameter);
 }

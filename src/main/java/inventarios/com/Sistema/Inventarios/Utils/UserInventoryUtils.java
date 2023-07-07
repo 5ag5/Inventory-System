@@ -1,4 +1,4 @@
-package inventarios.com.Sistema.Inventarios.Utilities;
+package inventarios.com.Sistema.Inventarios.Utils;
 import java.security.SecureRandom;
 public final class UserInventoryUtils {
     public static String generateRandomPassword(int len)
