@@ -1,12 +1,12 @@
 package inventarios.com.Sistema.Inventarios.Configurations;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
@@ -18,6 +18,8 @@ import javax.servlet.http.HttpSession;
 @EnableWebSecurity
 @Configuration
 public class WebAuthorization  {
+
+
     @Bean
     public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -30,7 +32,10 @@ public class WebAuthorization  {
         http.formLogin()
                 .usernameParameter("login")
                 .passwordParameter("password")
-                .loginPage("/api/login");
+                .loginPage("/api/login")
+                ;
+
+            ;
 
         http.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID");
         // turn off checking for CSRF tokens
