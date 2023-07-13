@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,8 +32,8 @@ public class GraphicsController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("api/graphs/UserGraphsCount")
-    public String [][]  listaPrueba(@RequestParam String nameArgument) {
+    @GetMapping("api/graphs/UserGraphsCount/{nameArgument}")
+    public String [][]  listaPrueba(@PathVariable String nameArgument) {
 
         List<UserInventory> namesCategories = userInventoryService.findAllUsers();
         Set<String> namesArgument = new HashSet<>();
@@ -71,8 +72,8 @@ public class GraphicsController {
         return GraphsUtils.get2DGraph(namesArgument,elementsArguments,nameArgument);
     }
 
-    @GetMapping("api/graphs/auditGraphsCount")
-    public   String[][] graphAudit(@RequestParam String nameArgument){
+    @GetMapping("api/graphs/auditGraphsCount/{nameArgument}")
+    public   String[][] graphAudit(@PathVariable String nameArgument){
 
         List<Audit> namesCategories = auditService.findAllAudit();
         Set <String> namesArgument = new HashSet<>();
@@ -117,8 +118,8 @@ public class GraphicsController {
         return GraphsUtils.get2DGraph(namesArgument,elementsArguments,nameArgument);
     }
 
-    @GetMapping("api/graphs/auditProductsCount")
-    public String[][] getProductsCounts(@RequestParam String nameArgument){
+    @GetMapping("api/graphs/auditProductsCount/{nameArgument}")
+    public String[][] getProductsCounts(@PathVariable String nameArgument){
 
         List<Product> namesCategories = productService.findAllProducts();
         Set <String> namesArgument = new HashSet<>();
