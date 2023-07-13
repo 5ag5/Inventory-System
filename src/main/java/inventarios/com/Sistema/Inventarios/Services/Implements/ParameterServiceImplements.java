@@ -26,6 +26,11 @@ public class ParameterServiceImplements implements ParameterService {
     }
 
     @Override
+    public List<Parameter> findAllParameters() {
+        return parameterRepository.findAll();
+    }
+
+    @Override
     public List<ParameterDTO> getAllParameterDTO() {
         List<ParameterDTO> getAllParameters = parameterRepository.findAll().stream().map(parameter -> new ParameterDTO(parameter)).collect(Collectors.toList());
         return getAllParameters.stream().filter(element -> element.isParameterStatus()).collect(Collectors.toList());

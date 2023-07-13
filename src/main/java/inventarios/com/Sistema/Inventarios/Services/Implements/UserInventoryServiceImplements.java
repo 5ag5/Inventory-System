@@ -1,5 +1,6 @@
 package inventarios.com.Sistema.Inventarios.Services.Implements;
 
+import inventarios.com.Sistema.Inventarios.DTOs.UserDTO;
 import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.Repositories.UserInventoryRepository;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
@@ -38,6 +39,12 @@ public class UserInventoryServiceImplements implements UserInventoryService {
     @Override
     public UserInventory findUser(String login) {
         return userInventoryRepository.findByLogin(login);
+    }
+
+    @Override
+    public UserDTO findUserDTO(String login) {
+        UserInventory userTemp = userInventoryRepository.findByLogin(login);
+        return new UserDTO(userTemp);
     }
 
     @Override

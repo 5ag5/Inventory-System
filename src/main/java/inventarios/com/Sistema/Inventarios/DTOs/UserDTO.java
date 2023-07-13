@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserDTO {
+
+    private Long id;
     private String login;
     private String lastName;
     private String password;
@@ -23,6 +25,7 @@ public class UserDTO {
     public UserDTO(){}
 
     public UserDTO(UserInventory userInventory) {
+        this.id = userInventory.getId();
         this.login = userInventory.getLogin();
         this.lastName = userInventory.getLastName();
         this.password = userInventory.getPassword();
@@ -33,6 +36,10 @@ public class UserDTO {
         this.userType = userInventory.getUserType();
         this.numberOfLoginTries = userInventory.getNumberOfLoginTries();
         this.auditories = userInventory.getAuditories().stream().map(audit -> new AuditDTO(audit)).collect(Collectors.toSet());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getLogin() {

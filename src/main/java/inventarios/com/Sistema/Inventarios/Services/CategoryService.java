@@ -13,4 +13,6 @@ public interface CategoryService {
     List<CategoryDTO> getAllCategoryDTO();
 
     void saveCategory(Category category);
+
+    List<Category> findAllCategories();
 }

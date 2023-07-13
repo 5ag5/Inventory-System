@@ -14,10 +14,17 @@ import java.util.stream.Collectors;
 public class AuditServiceImplements implements AuditService {
 
     @Autowired
-    private AuditRepository auditRepository;
+    AuditRepository auditRepository;
+
     @Override
     public Audit findById(Long id) {
         return auditRepository.findById(id).orElse(null);
+    }
+
+
+    @Override
+    public AuditDTO findByIdDTO(Long id) {
+        return auditRepository.findById(id).map(Audit -> new AuditDTO(Audit)).orElse(null);
     }
 
     @Override

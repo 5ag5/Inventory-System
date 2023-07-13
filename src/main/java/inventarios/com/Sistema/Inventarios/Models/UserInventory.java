@@ -4,8 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class UserInventory {
@@ -44,13 +43,13 @@ public class UserInventory {
         this.numberOfLoginTries = 0;
     }
 
-    public Parameter getParameter() {
+    /*public Parameter getParameter() {
         return parameter;
     }
 
     public void setParameter(Parameter parameter) {
         this.parameter = parameter;
-    }
+    }*/
     public Long getId() {
         return id;
     }

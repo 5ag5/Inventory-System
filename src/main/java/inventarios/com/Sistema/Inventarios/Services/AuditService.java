@@ -9,6 +9,8 @@ public interface AuditService {
 
     Audit findById(Long id);
 
+    AuditDTO findByIdDTO(Long id);
+
     List<AuditDTO> getAllAuditDTO();
 
     List<Audit> findAllAudit();

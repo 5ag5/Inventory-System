@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ProductDTO {
+
+    private Long id;
     private String descriptionProduct;
     private boolean statusProduct;
     private int cantidadProduct;
@@ -21,6 +23,7 @@ public class ProductDTO {
     public ProductDTO(){}
 
     public ProductDTO(Product product) {
+        this.id = product.getId();
         this.descriptionProduct = product.getDescriptionProduct();
         this.statusProduct = product.isStatusProduct();
         this.cantidadProduct = product.getCantidadProduct();
@@ -30,6 +33,10 @@ public class ProductDTO {
         this.maximumStock = product.getMaximumStock();
         this.includesIVA = product.isIncludesIVA();
         this.auditories = product.getAuditories().stream().map(audit -> new AuditDTO(audit)).collect(Collectors.toSet());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Set<AuditDTO> getAuditories() {

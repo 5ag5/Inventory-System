@@ -7,6 +7,8 @@ import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.ProductService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
 import inventarios.com.Sistema.Inventarios.Utils.GraphsUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +21,8 @@ import java.util.Set;
 
 @RestController
 public class GraphicsController {
+    private static final Logger logger = LogManager.getLogger(UserInventoryController.class);
+
     @Autowired
     UserInventoryService userInventoryService;
     @Autowired
@@ -61,6 +65,8 @@ public class GraphicsController {
                 }
                 break;
         }
+
+        logger.info("User Graphs Created");
 
         return GraphsUtils.get2DGraph(namesArgument,elementsArguments,nameArgument);
     }
@@ -105,6 +111,8 @@ public class GraphicsController {
                 }
                 break;
         }
+
+        logger.info("Audit Graphs Created");
 
         return GraphsUtils.get2DGraph(namesArgument,elementsArguments,nameArgument);
     }
@@ -163,6 +171,8 @@ public class GraphicsController {
                 }
                 break;
         }
+
+        logger.info("Audit Products Created");
 
         return GraphsUtils.get2DGraph(namesArgument,elementsArguments,nameArgument);
 
