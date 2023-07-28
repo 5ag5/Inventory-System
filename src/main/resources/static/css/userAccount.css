@@ -1,0 +1,43 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    background: #176B87;
+    min-height: 20vh;
+}
+main{
+    background: #001C30;
+    min-height: 70vh;
+}
+h1{
+    color: white;
+    text-align: center;
+}
+.colorW{
+    color: white;
+}
+a{
+    text-decoration: none;
+}
+.buttonGithub{
+    background-color: #D9D9D9;
+    border-radius: 0.2rem;
+    height: 5rem;
+}
+.containerFooter{
+    width: 30rem;
+    display: flex;
+    justify-content: space-around;
+}
+.personalInformation{
+    background: #DAFFFB;
+    width: 30rem;
+    border-radius: 0.5rem;
+}
+footer{
+    background-color: #176B87;
+    min-height: 10vh;
+}

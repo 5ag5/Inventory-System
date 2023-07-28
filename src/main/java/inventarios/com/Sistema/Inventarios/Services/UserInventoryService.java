@@ -1,5 +1,6 @@
 package inventarios.com.Sistema.Inventarios.Services;
 
+import inventarios.com.Sistema.Inventarios.DTOs.UserDTO;
 import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import org.springframework.security.core.Authentication;
 
@@ -19,6 +20,10 @@ public interface UserInventoryService {
     UserInventory findByEmail(String email);
 
     UserInventory getAuthenticatedUser(Authentication authentication);
+
+    UserDTO getUserDTO(Authentication authentication);
+
+    List<UserDTO> getUsersDTO();
 
 
 

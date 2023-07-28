@@ -36,12 +36,12 @@ public class ParameterController {
         return ParameterUtils.foundParameterSearch(listParameters,parameter);
     }
 
-    @GetMapping("api/parameter/allParameters")
+    @GetMapping("/api/parameter/allParameters")
     public List<ParameterDTO> allParametersEndPoint(){
         return parameterService.getAllParameterDTO();
     }
 
-    @PostMapping("api/parameter/createParameter")
+    @PostMapping("/api/parameter/createParameter")
     public ResponseEntity<Object> createParameter(@RequestBody Parameter parameter, Authentication authenticated) throws UnknownHostException {
         List<ParameterDTO> listParameters = parameterService.getAllParameterDTO();
 
@@ -90,7 +90,7 @@ public class ParameterController {
         return new ResponseEntity<>("Parameter Modified", HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("api/parameter/deleteParameter")
+    @PatchMapping("/api/parameter/deleteParameter")
     public ResponseEntity<Object> deleteParameter(Authentication authenticated, @RequestParam String nameParameter) throws UnknownHostException {
         Parameter parameterTemp = parameterService.findParameterByName(nameParameter);
         UserInventory userTemp = userInventoryService.getAuthenticatedUser(authenticated);
