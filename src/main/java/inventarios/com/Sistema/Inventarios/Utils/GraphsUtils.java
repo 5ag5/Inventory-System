@@ -1,48 +1,46 @@
 package inventarios.com.Sistema.Inventarios.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import inventarios.com.Sistema.Inventarios.Models.slicePie;
+
+import java.util.*;
 
 public final class GraphsUtils {
 
     public static String [][] get2DGraph(Set<String>namesArgument,  List<String> elementsArguments, String nameArgument){
-        int sizeArray =0;
+        Map<String, Integer> seen = new HashMap<>();
+        List<String> countValues = new ArrayList<>();
 
-
-        if(namesArgument.size() == 1) {
-            sizeArray = namesArgument.size()+1;
-        }else{
-            sizeArray = namesArgument.size();
+        for(String argument: elementsArguments){
+            seen.put(argument,seen.getOrDefault(argument, 0) + 1);
         }
 
+        for(int val: seen.values()){
+            countValues.add(String.valueOf(val));
+        }
+        return new String[][]{namesArgument.toArray(new String[0]), countValues.toArray(new String[0])};
+    }
 
-        String[][] arrayAnswer = new String[sizeArray][2];
+    public static List<slicePie>getPieChart(List<String> elementsArguments, Set<String> nameParameters){
+        Map<String, Double> seen = new HashMap<>();
+        List<slicePie> dataPie = new ArrayList<>();
 
-        arrayAnswer[0][0] = nameArgument;
-        arrayAnswer[0][1] = "count";
-
-        ArrayList<String> arrayTemp = new ArrayList<>(namesArgument);
-
-        arrayAnswer[1][0] = arrayTemp.get(0);
-
-        for(int i=1; i < arrayTemp.size();i++){
-            arrayAnswer[i][0] = arrayTemp.get(i);
-            arrayAnswer[i][1] = "0";
+        for(String arg: elementsArguments){
+            seen.put(arg, seen.getOrDefault(arg,0.0)+1);
         }
 
-        if(arrayAnswer[1][1] == null){
-            arrayAnswer[1][1] = "0";
+        for(String value: nameParameters){
+            double valuePercentage = seen.get(value)/elementsArguments.size();
+            slicePie obj = new slicePie(value,valuePercentage,false, false);
+            dataPie.add(obj);
         }
 
-        for(String element: elementsArguments){
-            for(int i=1; i < arrayAnswer.length;i++) {
-                if(arrayAnswer[i][0].equals(element)){
-                    arrayAnswer[i][1] = String.valueOf(Integer.parseInt(arrayAnswer[i][1]) +1);
-                }
-            }
-        }
-        return arrayAnswer;
+        slicePie objTrue = dataPie.get(0);
+        objTrue.setSlice(true);
+        objTrue.setSelected(true);
+        dataPie.remove(0);
+        dataPie.add(objTrue);
+
+        return dataPie;
     }
 
 }

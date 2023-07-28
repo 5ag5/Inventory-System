@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.net.InetAddress;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class SistemaInventariosApplication {
@@ -35,6 +37,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 UserInventory user3 = new UserInventory("user33","Guzman",passwordEncoder.encode("user789"),"correo3@gmail.com",UserType.WORKER);
 	UserInventory user4 = new UserInventory("user44","Rodriguez",passwordEncoder.encode("user012"),"correo4@gmail.com", UserType.SUPERVISOR);
 	UserInventory user5 = new UserInventory("user55","De Zubiria",passwordEncoder.encode("user345"),"correo5@gmail.com",UserType.WORKER);
+	 user4.setStatus(false);
 
 	 Category vegetables = new Category("VEGETABLES", true);
 	 Category videoGames = new Category("VIDEO GAMES",true);
@@ -44,6 +47,8 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Product fifa2023 = new Product("football game created by EA Sports",45,10.00,40.00,
 			 3,1000,true);
+
+	 List<Character> ans = new ArrayList<Character>();
 
 	 productRepository.save(cavages);
 	 productRepository.save(fifa2023);

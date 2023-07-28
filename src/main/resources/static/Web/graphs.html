@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="graphs.css">
+    <title>Graphs Page</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar1">
+            <div class="container-fluid">
+              <img src="/Images/Logo_Inventory_System.-removebg-preview (1).png" alt="logo-company" id="logo">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <button type="button" class="btn btn-secondary"><a href="">Reports</a></button>
+                <button type="button" class="btn btn-secondary"><a href="">Parameters</a></button>
+                <button type="button" class="btn btn-secondary"><a href="">Users</a></button>
+                <button type="button" class="btn btn-secondary"><a href="">Products</a></button>
+                <button type="button" class="btn btn-secondary"><a href="">Categories</a></button>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main id="app">
+      <h1 id="titleH1">GRAPHS/REPORTS</h1>
+      <div id="DIVContainerInputGraphs">
+        <div id="DIVInputGraphs">
+          <div class="dropdown">
+            <button id="buttonsGraphs" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Input Type
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+          <div class="dropdown">
+            <button id="buttonsGraphs" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Choose Parameter
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+          <button type="button" class="btn btn-primary" id="executeGraphs">Execute</button>
+        </div>
+      </div>
+
+      <div id="DIVGraphsAndParameters">
+        <div id="GraphInfo"></div>
+        <div id="DIVdownloadParameter">HELLOOO</div>
+      </div>
+    </main>
+    <footer>
+        <h6>All rights reserved</h6>
+    </footer>
+</body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="graphs.js"></script>
+</html>
