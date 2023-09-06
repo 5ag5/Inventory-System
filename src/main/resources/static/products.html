@@ -11,7 +11,35 @@
 <body>
   <div id="app">
       <header>
-
+        <nav class="navbar navbar-expand-lg text-light bg-info">
+          <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                  <img src="./assets/Logo_Inventory_System.-removebg-preview (1).png" alt="Bootstrap"  class="logo">
+                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0  buttonsNavSpace">
+                  <li class="nav-item">
+                      <a class="nav-link  buttonNav" aria-current="page" href="">Reports</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link buttonNav" href="">Graphs</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link buttonNav" href="#">Users</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link buttonNav" href="">Parameters</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link buttonNav" href="">Categories</a>
+                  </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
       </header>
       <main>
         
@@ -29,33 +57,33 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <div class="d-flex">
-                  <p>description Product</p>
-                  <input type="text" v-model="descriptionProduct">
+                <div class="d-flex ">
+                  <p class="paragraph">description Product</p>
+                  <input type="text" v-model="descriptionProduct" class="intpuSize">
                 </div>
                 
                 <div class="d-flex">
-                  <p>quantity Product:</p>
-                  <input type="number" v-model="quantityProduct">
+                  <p class="paragraph">quantity Product:</p>
+                  <input type="number" v-model="quantityProduct" class="intpuSize">
                 </div>
                 <div class="d-flex">
-                  <p>price Buy</p>
-                  <input type="number"  v-model="priceBuy">
+                  <p class="paragraph">price Buy</p>
+                  <input type="number"  v-model="priceBuy" class="intpuSize">
                 </div>
                 <div class="d-flex">
-                  <p>selling Price</p>
-                  <input type="number"  v-model="sellingPrice">
+                  <p class="paragraph">selling Price</p>
+                  <input type="number"  v-model="sellingPrice" class="intpuSize">
                 </div>
                 <div class="d-flex">
-                  <p>minimum Stock</p>
-                  <input type="number"  v-model="minimumStock">
+                  <p class="paragraph">minimum Stock</p>
+                  <input type="number"  v-model="minimumStock" class="intpuSize">
                 </div>
                 <div class="d-flex">
-                  <p>maximum Stock</p>
-                  <input type="number"  v-model="maximumStock">
+                  <p class="paragraph">maximum Stock</p>
+                  <input type="number"  v-model="maximumStock" class="intpuSize">
                 </div>
                 <div class="d-flex">
-                  <p>includes IVA</p>
+                  <p class="paragraph">includes IVA</p>
                   <!--<input type="text"  v-model="includesIVA">-->
                   <select class="select"  v-model="includesIVA">
                     <option value=true>True</option>
@@ -72,12 +100,12 @@
             </div>
         </div>
         <button>Modify</button>
-        <form class="d-flex" role="search" id="search-title">
+        <form class="d-flex container" role="search" id="search-title">
           <input class="form-control me-2 colorFuchsia colorRadio" type="search" aria-label="Search" v-model="wordSearch">
           <button class="btn btn-outline-info" type="submit" v-on:click.prevent="search">Search</button>
         </form>
           <h1>Products</h1>
-          <div class="table-responsive">
+          <div class="table-responsive container">
             <table class="table colorW">
               <thead>
                 <tr> 
@@ -90,8 +118,8 @@
                   <th scope="col">Maximun Stock</th>
                   <th scope="col">Minimum Stock</th>
                   <th scope="col">Includes IVA</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Parameter</th>
+                 <!-- <th scope="col">Category</th>
+                  <th scope="col">Parameter</th>-->
                   <th scope="col">Delete</th>
                 </tr>
               </thead>
@@ -106,9 +134,9 @@
                   <td>{{product.minimumStock}}</td>
                   <td>{{product.maximumStock}}</th>
                   <td>{{product.includesIVA}}</td>
-                  <td>{{product.category}}</td>
-                  <td>{{product.parameter}}</td>
-                  <td> <a @click="deleteProduct(product.id)" class="btn ">Delete</a> </td>
+                  <!--<td>{{product.category}}</td>
+                  <td>{{product.parameter}}</td>-->
+                  <td> <a @click="deleteProduct(product.id)" class="btn buttonDelete">Delete</a> </td>
                   <!--<td><input type="button" value="Delete" class="btn solid" v-on:click="deleteProduct(product.id)"/></td>-->
                 </tr>
               </tbody>

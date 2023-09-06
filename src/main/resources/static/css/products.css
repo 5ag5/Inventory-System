@@ -9,9 +9,24 @@
     box-sizing: border-box;
 }
 
-header{
-    background: #176B87;
+.navbar{
+    background: #176B87 !important;
     min-height: 20vh;
+}
+.buttonNav{
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color:#D9D9D9 !important;
+}
+.buttonsNavSpace{
+    width: 30rem;
+    display: flex;
+    justify-content: space-around;   
+}
+
+.logo{
+    height: 70px;
+    object-fit: cover;
 }
 main{
     background: #001C30;
@@ -23,6 +38,20 @@ h1{
 }
 .colorW{
     color: white;
+}
+.lightBlueBackground{
+    background-color: #DAFFFB;
+}
+.buttonDelete{
+    background-color: rgb(235, 72, 72);
+    color: white;
+    border-radius: 0.5rem;
+}
+.intpuSize{
+    height: 25px;
+}
+.paragraph{
+    margin-right: 1rem;
 }
 a{
     text-decoration: none;

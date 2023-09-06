@@ -124,4 +124,30 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping("/api/products/modifyProduct")
+    public ResponseEntity<Object> modifyProduct(Authentication authentication, @RequestParam Long id,
+                                                @RequestParam String descriptionProduct,
+                                                @RequestParam boolean statusProduct,
+                                                @RequestParam int cantidadProduct,
+                                                @RequestParam double precioCompra,
+                                                @RequestParam double precioVenta,
+                                                @RequestParam int minimumStock,
+                                                @RequestParam  int maximumStock,
+                                                @RequestParam boolean includesIVA){
+        Product product= productService.finProducById(id);
+        if(product!=null){
+                product.setDescriptionProduct(descriptionProduct);
+                product.setStatusProduct(statusProduct);
+                product.setCantidadProduct(cantidadProduct);
+                product.setPrecioCompra(precioCompra);
+                product.setPrecioVenta(precioVenta);
+                product.setMaximumStock(minimumStock);
+                product.setMinimumStock(maximumStock);
+                product.setIncludesIVA(includesIVA);
+                productService.inputProduct(product);
+                return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
+        }
+            return new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
+
+    }
 }

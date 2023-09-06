@@ -7,7 +7,12 @@ const app=createApp({
             wordSearch:'',
             parameterDescription:'',
             nameParameter :'',
-            valueParameter :''
+            valueParameter :'',
+            parameterDescriptionM:'',
+            nameParameterM :'',
+            valueParameterM :'',
+            parameterStatusM:'',
+            idParameter:''
             
             
         }
@@ -25,7 +30,6 @@ const app=createApp({
             .catch(error=>{console.log(error)})
         },
         deleteParameter(nameParameter){
-            console.log(nameParameter)
             axios.patch('/api/parameter/deleteParameter',`nameParameter=${nameParameter}`)
             .then(response=>{
                 Swal.fire({
@@ -58,6 +62,39 @@ const app=createApp({
                 Swal.fire({
                     title:'Maked!',
                     text:'you created a new parameter',
+                    icon:'success',
+                    didOpen:()=>{
+                        document.querySelector('.swal2-confirm').addEventListener('click', () =>{window.location.href='/parameters.html'})
+                    }
+                }) 
+            })
+            .catch(function(error){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response.data,
+                   
+                  })
+            })
+        },
+        getId(id){
+            this.idParameter=id
+        }
+        ,
+        changeInfo(){
+            console.log(id +"id del parametro")
+            axios.put('/api/user/changes',
+            {
+                "parameterDescription" :this. parameterDescriptionM,
+                "parameterStatus" : this.parameterStatusM,
+                "nameParameter" : this.nameParameterM,
+                "valueParameter" : this.valueParameterM
+               
+            }, `id=${this.idParameter}`)
+            .then(response=>{
+                Swal.fire({
+                    title:'Maked!',
+                    text:'you changed the information',
                     icon:'success',
                     didOpen:()=>{
                         document.querySelector('.swal2-confirm').addEventListener('click', () =>{window.location.href='/parameters.html'})

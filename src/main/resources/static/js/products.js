@@ -26,6 +26,7 @@ const app=createApp({
             .then(response=>{
                 this.products=response.data.filter(product=>product.statusProduct)
                 this.filteredProducts=response.data.filter(product=>product.statusProduct)
+                console.log(this.products)
             })
             .catch(error=>{console.log(error)})
         },

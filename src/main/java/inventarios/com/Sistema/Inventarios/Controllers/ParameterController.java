@@ -106,6 +106,24 @@ public class ParameterController {
         return new ResponseEntity<>("Parameter Erased", HttpStatus.ACCEPTED);
     }
 
+    @PutMapping("/api/user/changes")
+    public ResponseEntity<Object> changeInfo(Authentication authentication,  @RequestParam Long id,
+                                             @RequestParam String parameterDescription,
+                                             @RequestParam boolean parameterStatus,
+                                             @RequestParam String nameParameter,
+                                             @RequestParam String  valueParameter){
+        Parameter parameter=parameterService.findById(id);
+        if(parameter!=null){
+            parameter.setParameterDescription(parameterDescription);
+            parameter.setParameterStatus(parameterStatus);
+            parameter.setNameParameter(nameParameter);
+            parameter.setValueParameter(valueParameter);
+            parameterService.saveParameter(parameter);
+            return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
+        }
+       return  new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
+    }
+
     //=========================================AUDIT METHODS=======================================//
 
     private void AuditRegisterInputParameter(String login) throws UnknownHostException {
