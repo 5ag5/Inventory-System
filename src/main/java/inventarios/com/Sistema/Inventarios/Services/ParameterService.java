@@ -14,4 +14,6 @@ public interface ParameterService {
     void saveParameter(Parameter parameter);
 
     Parameter findParameterByName(String nameParameter);
+
+    List<Parameter> findAllParameters();
 }

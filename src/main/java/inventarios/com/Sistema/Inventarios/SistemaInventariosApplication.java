@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.net.InetAddress;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class SistemaInventariosApplication {
@@ -35,12 +37,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 UserInventory user3 = new UserInventory("user33","Guzman",passwordEncoder.encode("user789"),"correo3@gmail.com",UserType.WORKER);
 	UserInventory user4 = new UserInventory("user44","Rodriguez",passwordEncoder.encode("user012"),"correo4@gmail.com", UserType.SUPERVISOR);
 	UserInventory user5 = new UserInventory("user55","De Zubiria",passwordEncoder.encode("user345"),"correo5@gmail.com",UserType.WORKER);
-
-	userInventoryRepository.save(user1);
-	 userInventoryRepository.save(user2);
-	 userInventoryRepository.save(user3);
-	 userInventoryRepository.save(user4);
-	 userInventoryRepository.save(user5);
+	 user4.setStatus(false);
 
 	 Category vegetables = new Category("VEGETABLES", true);
 	 Category videoGames = new Category("VIDEO GAMES",true);
@@ -50,6 +47,8 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Product fifa2023 = new Product("football game created by EA Sports",45,10.00,40.00,
 			 3,1000,true);
+
+	 List<Character> ans = new ArrayList<Character>();
 
 	 productRepository.save(cavages);
 	 productRepository.save(fifa2023);
@@ -74,7 +73,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 String.valueOf(InetAddress.getLocalHost()),
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 0L,
+			 2L,
 			 tableNames.USERINVENTORY);
 
 
@@ -83,7 +82,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 String.valueOf(InetAddress.getLocalHost()),
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 0L,
+			 2L,
 			 tableNames.USERINVENTORY);
 
 	 Audit audit3 = new Audit(
@@ -91,7 +90,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 String.valueOf(InetAddress.getLocalHost()),
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 0L,
+			 2L,
 			 tableNames.USERINVENTORY);
 
 	 Audit audit4 = new Audit(
@@ -99,7 +98,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 String.valueOf(InetAddress.getLocalHost()),
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 0L,
+			 3L,
 			 tableNames.USERINVENTORY);
 
 	 Audit audit5 = new Audit(
@@ -107,7 +106,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 String.valueOf(InetAddress.getLocalHost()),
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 0L,
+			 3L,
 			 tableNames.USERINVENTORY);
 
 	 Audit audit6 = new Audit(
@@ -115,25 +114,30 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 String.valueOf(InetAddress.getLocalHost()),
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 0L,
+			 3L,
 			 tableNames.USERINVENTORY);
 
-	auditRepository.save(audit1);
-	auditRepository.save(audit2);
-	auditRepository.save(audit3);
-	auditRepository.save(audit4);
-	auditRepository.save(audit5);
-	auditRepository.save(audit6);
 
+	 user2.addAudit(audit1);
+	 user2.addAudit(audit2);
+	 user2.addAudit(audit3);
+	 user3.addAudit(audit4);
+	 user3.addAudit(audit5);
+	 user3.addAudit(audit6);
 
-	user1.addAudit(audit1);
-	user1.addAudit(audit2);
-	user1.addAudit(audit3);
-	user1.addAudit(audit4);
-	user1.addAudit(audit5);
-	user1.addAudit(audit6);
+	 userInventoryRepository.save(user1);
+	 userInventoryRepository.save(user2);
+	 userInventoryRepository.save(user3);
+	 userInventoryRepository.save(user4);
+	 userInventoryRepository.save(user5);
 
-	userInventoryRepository.save(user1);
+	 auditRepository.save(audit1);
+	 auditRepository.save(audit2);
+	 auditRepository.save(audit3);
+	 auditRepository.save(audit4);
+	 auditRepository.save(audit5);
+	 auditRepository.save(audit6);
+
 
  };
 }

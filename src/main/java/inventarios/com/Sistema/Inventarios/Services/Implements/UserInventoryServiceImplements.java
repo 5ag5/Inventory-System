@@ -43,6 +43,12 @@ public class UserInventoryServiceImplements implements UserInventoryService {
     }
 
     @Override
+    public UserDTO findUserDTO(String login) {
+        UserInventory userTemp = userInventoryRepository.findByLogin(login);
+        return new UserDTO(userTemp);
+    }
+
+    @Override
     public List<UserInventory> findAllUsers() {
         return userInventoryRepository.findAll();
     }

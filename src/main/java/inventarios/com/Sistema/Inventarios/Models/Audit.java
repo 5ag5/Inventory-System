@@ -12,7 +12,6 @@ public class Audit {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-
     @Enumerated(EnumType.STRING)
     private ActionAudit actionAudit;
     private String direccionID;
@@ -27,6 +26,7 @@ public class Audit {
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="UserInventory_id")
     private UserInventory userInventory; // Many to One
 
     public  Audit(){

@@ -26,5 +26,5 @@ public interface UserInventoryService {
     List<UserDTO> getUsersDTO();
 
 
-
+    UserDTO findUserDTO(String userLogin);
 }

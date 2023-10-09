@@ -1,14 +1,18 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
 import inventarios.com.Sistema.Inventarios.DTOs.EmailDTO;
+
+import inventarios.com.Sistema.Inventarios.DTOs.ProductDTO;
+
 import inventarios.com.Sistema.Inventarios.DTOs.UserDTO;
 import inventarios.com.Sistema.Inventarios.Models.*;
+import inventarios.com.Sistema.Inventarios.PDFFiles.ProductPDFExporter;
+import inventarios.com.Sistema.Inventarios.PDFFiles.UserPDFExporter;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.EmailService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
+import inventarios.com.Sistema.Inventarios.ExcelFiles.UserExcelExporter;
 import inventarios.com.Sistema.Inventarios.Utils.UserInventoryUtils;
-import inventarios.com.Sistema.Inventarios.Utils.LogType;
-import inventarios.com.Sistema.Inventarios.Utils.UtilesLog;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -19,10 +23,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @RestController
 public class UserInventoryController {
@@ -66,7 +80,7 @@ public class UserInventoryController {
 
         //logger.debug("esta funcionando");
 
-        logger.info("ESTO FUNCIONA");
+        logger.info("USER REGISTERED");
 
         return new ResponseEntity<>("login registration complete",HttpStatus.ACCEPTED);
     }
@@ -104,6 +118,9 @@ public class UserInventoryController {
         userInventoryService.inputUser(userInventory);
         EmailDTO emailDTO= new EmailDTO(passwordBeforeEncrypting, email);
         emailService.sendEmail(emailDTO);
+
+        logger.info("NEW USER REGISTERED");
+
         return new ResponseEntity<>("Se envio la contraseña a su correo "+ passwordBeforeEncrypting,HttpStatus.CREATED);
     }
 
@@ -132,22 +149,46 @@ public class UserInventoryController {
         }
         userInventory.setPassword(passwordEncoder.encode(password));
         userInventoryService.inputUser(userInventory);
+
+        logger.info("PASSWORD CHANGED");
+
         return new ResponseEntity<>("password has been changed", HttpStatus.OK);
     }
 
     @PatchMapping("/api/users/validateAttempts")
-    public ResponseEntity<Object> validateAttempts(@RequestParam  String login){
+
+    public ResponseEntity<Object> validateAttempts(@RequestParam String login){
+
         UserInventory userInventory= userInventoryService.findUser(login);
         if(userInventory.getNumberOfLoginTries()>=3){
             userInventory.setStatus(false);
             userInventoryService.inputUser(userInventory);
-            return  new ResponseEntity<>("A exceeded the allowed attempts. Your account has been blocked.", HttpStatus.FORBIDDEN);
+            return  new ResponseEntity<>("Exceeded the allowed attempts. Your account has been blocked.", HttpStatus.FORBIDDEN);
 
         }
+
         int updatedAttempts=userInventory.getNumberOfLoginTries()+1;
         userInventory.setNumberOfLoginTries(updatedAttempts);
         userInventoryService.inputUser(userInventory);
+        logger.info("VALIDATED LOGIN ATTEMTPS");
+
         return  new ResponseEntity<>("Failed login attempts." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
+    }
+
+    @PatchMapping("api/users/blockUser")
+    public ResponseEntity<Object> blockUser(@RequestParam String login){
+        UserInventory userInventory= userInventoryService.findUser(login);
+
+        if(userInventory == null){
+            new ResponseEntity<>("User Not Found", HttpStatus.FORBIDDEN);
+        }
+
+        userInventory.setStatus(false);
+        userInventoryService.inputUser(userInventory);
+
+        logger.info("USER BLOCKED");
+
+        return  new ResponseEntity<>("User Blocked" +userInventory.getNumberOfLoginTries(), HttpStatus.ACCEPTED);
     }
 
     @PatchMapping("/api/users/activateAccount ")
@@ -160,7 +201,47 @@ public class UserInventoryController {
             return  new ResponseEntity<>("The account has been activated", HttpStatus.FORBIDDEN);
 
         }
+
+        logger.info("ADMIN ACTIVATED ACCOUNT");
+
         return  new ResponseEntity<>("The account is active." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<UserInventory> listUsers = userInventoryService.findAllUsers();
+
+        UserExcelExporter excelExporter = new UserExcelExporter(listUsers);
+
+        logger.info("USERS EXPORTED TO EXCEL");
+        excelExporter.export(response);
+    }
+
+    @PostMapping(path="/user/usersPDF")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=transactions_.pdf";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);
+        LocalDateTime dateTime2 = LocalDateTime.parse(endDate + " 23:59", formatter);*/
+
+        response.setHeader(headerKey,headerValue);
+
+        Set<UserDTO> userList = userInventoryService.findAllUsers().stream().map(user -> new UserDTO(user)).collect(Collectors.toSet());
+
+        UserPDFExporter exporter = new UserPDFExporter(userList);
+        exporter.export(response);
     }
 
     @GetMapping("/api/users")
@@ -172,6 +253,7 @@ public class UserInventoryController {
     public UserDTO getUser(Authentication authentication){
         return userInventoryService.getUserDTO(authentication);
     }
+
 
     //====================================AUDIT METHODS===============================//♠
     private void registerModifyUser(String login) throws UnknownHostException {
