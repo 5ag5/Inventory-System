@@ -6,6 +6,7 @@ import inventarios.com.Sistema.Inventarios.ExcelFiles.ProductExcelExporter;
 import inventarios.com.Sistema.Inventarios.Models.*;
 import inventarios.com.Sistema.Inventarios.PDFFiles.AuditPDFExporter;
 import inventarios.com.Sistema.Inventarios.PDFFiles.ProductPDFExporter;
+
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.ProductService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
@@ -13,10 +14,16 @@ import inventarios.com.Sistema.Inventarios.ExcelFiles.UserExcelExporter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,11 +32,13 @@ import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @RestController
 public class ProductController {
@@ -135,4 +144,74 @@ public class ProductController {
         auditService.saveAudit(auditTemp);
     }
 
+    @GetMapping("/api/products")
+    public List<ProductDTO> getProducts(){
+        return productService.getProducts();
+    }
+
+    @PatchMapping("/api/products/state")
+    public ResponseEntity<Object> changeProductStatus( @RequestParam Long id){
+        Product product= productService.finProducById(id);
+        if(product==null){
+            return new ResponseEntity<>("The product does not exist ", HttpStatus.FORBIDDEN);
+        }
+        product.setStatusProduct(false);
+        productService.inputProduct(product);
+        return new ResponseEntity<>("The product was eliminated",HttpStatus.OK);
+    }
+
+    @PostMapping("/api/products")
+    public ResponseEntity<Object> newProduct(Authentication authentication, @RequestParam String descriptionProduct, @RequestParam int cantidadProduct, @RequestParam double precioCompra, @RequestParam double precioVenta,@RequestParam int minimumStock,@RequestParam int maximumStock,@RequestParam boolean includesIVA){
+        if(descriptionProduct.isBlank()){
+            return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if(cantidadProduct<=0){
+            return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if(precioCompra<=0){
+            return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if(precioVenta<=0){
+            return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if(minimumStock<=0){
+            return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if(maximumStock<=0){
+            return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        if( !((Object)includesIVA).getClass().getSimpleName().equals("Boolean")){
+            return new ResponseEntity<>("IVA cannot be empty",HttpStatus.FORBIDDEN);
+        }
+        Product product=new Product(descriptionProduct,  cantidadProduct,  precioCompra,  precioVenta, minimumStock,  maximumStock,  includesIVA);
+        productService.inputProduct(product);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/api/products/modifyProduct")
+    public ResponseEntity<Object> modifyProduct(Authentication authentication, @RequestParam Long id,
+                                                @RequestParam String descriptionProduct,
+                                                @RequestParam boolean statusProduct,
+                                                @RequestParam int cantidadProduct,
+                                                @RequestParam double precioCompra,
+                                                @RequestParam double precioVenta,
+                                                @RequestParam int minimumStock,
+                                                @RequestParam  int maximumStock,
+                                                @RequestParam boolean includesIVA){
+        Product product= productService.finProducById(id);
+        if(product!=null){
+                product.setDescriptionProduct(descriptionProduct);
+                product.setStatusProduct(statusProduct);
+                product.setCantidadProduct(cantidadProduct);
+                product.setPrecioCompra(precioCompra);
+                product.setPrecioVenta(precioVenta);
+                product.setMaximumStock(minimumStock);
+                product.setMinimumStock(maximumStock);
+                product.setIncludesIVA(includesIVA);
+                productService.inputProduct(product);
+                return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
+        }
+            return new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
+
+    }
 }

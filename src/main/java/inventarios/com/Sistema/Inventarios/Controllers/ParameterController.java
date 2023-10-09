@@ -53,12 +53,12 @@ public class ParameterController {
         return ParameterUtils.foundParameterSearch(listParameters,parameter);
     }
 
-    @GetMapping("api/parameter/allParameters")
+    @GetMapping("/api/parameter/allParameters")
     public List<ParameterDTO> allParametersEndPoint(){
         return parameterService.getAllParameterDTO();
     }
 
-    @PostMapping("api/parameter/createParameter")
+    @PostMapping("/api/parameter/createParameter")
     public ResponseEntity<Object> createParameter(@RequestBody Parameter parameter, Authentication authenticated) throws UnknownHostException {
         List<ParameterDTO> listParameters = parameterService.getAllParameterDTO();
 
@@ -111,7 +111,7 @@ public class ParameterController {
         return new ResponseEntity<>("Parameter Modified", HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("api/parameter/deleteParameter")
+    @PatchMapping("/api/parameter/deleteParameter")
     public ResponseEntity<Object> deleteParameter(Authentication authenticated, @RequestParam String nameParameter) throws UnknownHostException {
         Parameter parameterTemp = parameterService.findParameterByName(nameParameter);
         UserInventory userTemp = userInventoryService.getAuthenticatedUser(authenticated);
@@ -168,6 +168,24 @@ public class ParameterController {
         logger.info("EXPORTED PDF OF PARAMETERS");
 
         exporter.export(response);
+
+    @PutMapping("/api/user/changes")
+    public ResponseEntity<Object> changeInfo(Authentication authentication,  @RequestParam Long id,
+                                             @RequestParam String parameterDescription,
+                                             @RequestParam boolean parameterStatus,
+                                             @RequestParam String nameParameter,
+                                             @RequestParam String  valueParameter){
+        Parameter parameter=parameterService.findById(id);
+        if(parameter!=null){
+            parameter.setParameterDescription(parameterDescription);
+            parameter.setParameterStatus(parameterStatus);
+            parameter.setNameParameter(nameParameter);
+            parameter.setValueParameter(valueParameter);
+            parameterService.saveParameter(parameter);
+            return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
+        }
+       return  new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
+
     }
 
     //=========================================AUDIT METHODS=======================================//

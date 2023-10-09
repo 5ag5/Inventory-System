@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -62,6 +63,15 @@ public class UserInventoryServiceImplements implements UserInventoryService {
         return userInventoryRepository.findByLogin(authentication.getName());
     }
 
+    @Override
+    public UserDTO getUserDTO(Authentication authentication) {
+        return new UserDTO(userInventoryRepository.findByLogin(authentication.getName()));
+    }
+
+    @Override
+    public List<UserDTO> getUsersDTO() {
+        return userInventoryRepository.findAll().stream().map(userInventory -> new UserDTO(userInventory)).collect(Collectors.toList());
+    }
 
 
 }

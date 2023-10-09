@@ -21,6 +21,10 @@ public interface UserInventoryService {
 
     UserInventory getAuthenticatedUser(Authentication authentication);
 
+    UserDTO getUserDTO(Authentication authentication);
+
+    List<UserDTO> getUsersDTO();
+
 
     UserDTO findUserDTO(String userLogin);
 }

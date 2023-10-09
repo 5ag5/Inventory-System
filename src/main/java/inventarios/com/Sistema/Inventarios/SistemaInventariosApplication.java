@@ -32,7 +32,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 								  CategoryRepository categoryRepository,
 								  AuditRepository auditRepository){
  return (args) -> {
-	UserInventory user1 = new UserInventory("user11","Gonzalez", passwordEncoder.encode("user123"),"correo1@gmail.com", UserType.ADMIN);
+	UserInventory user1 = new UserInventory("user11","Gonzalez", passwordEncoder.encode("user11"),"correo1@gmail.com", UserType.ADMIN);
 	UserInventory user2 = new UserInventory("user22","Garcia",passwordEncoder.encode("user456"),"correo2@gmail.com",UserType.CASHIER);
 	 UserInventory user3 = new UserInventory("user33","Guzman",passwordEncoder.encode("user789"),"correo3@gmail.com",UserType.WORKER);
 	UserInventory user4 = new UserInventory("user44","Rodriguez",passwordEncoder.encode("user012"),"correo4@gmail.com", UserType.SUPERVISOR);

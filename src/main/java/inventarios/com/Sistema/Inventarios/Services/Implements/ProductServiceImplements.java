@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImplements implements ProductService {
@@ -39,6 +40,16 @@ public class ProductServiceImplements implements ProductService {
     @Override
     public List<Product> findAllProducts() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public List<ProductDTO> getProducts() {
+        return productRepository.findAll().stream().map(product -> new ProductDTO(product)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Product finProducById(Long id) {
+        return productRepository.findById(id).orElse(null);
     }
 }
 
