@@ -1,6 +1,7 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
 import inventarios.com.Sistema.Inventarios.DTOs.EmailDTO;
+import inventarios.com.Sistema.Inventarios.DTOs.UserDTO;
 import inventarios.com.Sistema.Inventarios.Models.*;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
 import inventarios.com.Sistema.Inventarios.Services.EmailService;
@@ -16,14 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class UserInventoryController {
@@ -111,8 +110,11 @@ public class UserInventoryController {
 
 
     @PatchMapping("/api/users/password")
-    public ResponseEntity<Object> changePassword(Authentication authentication, @RequestParam String password){
+    public ResponseEntity<Object> changePassword(Authentication authentication, @RequestParam String password, @RequestParam String oldPassword){
         UserInventory userInventory=userInventoryService.getAuthenticatedUser(authentication);
+        if(!passwordEncoder.matches(oldPassword,userInventory.getPassword())){
+            return new ResponseEntity<>("Incorrect password above, please correct it..", HttpStatus.FORBIDDEN);
+        }
         if (password.length() < 5 || password.length() > 8) {
             return new ResponseEntity<>("The password cannot be less than 5 or more than 8 characters long.", HttpStatus.FORBIDDEN);
         }
@@ -128,13 +130,13 @@ public class UserInventoryController {
         if(password.equals(userInventory.getPassword())){
             return new ResponseEntity<>("The password must be different.", HttpStatus.FORBIDDEN);
         }
-        userInventory.setPassword(password);
+        userInventory.setPassword(passwordEncoder.encode(password));
         userInventoryService.inputUser(userInventory);
         return new ResponseEntity<>("password has been changed", HttpStatus.OK);
     }
 
-    @PatchMapping("/api/users/validateAttempts ")
-    public ResponseEntity<Object> validateAttempts(String login){
+    @PatchMapping("/api/users/validateAttempts")
+    public ResponseEntity<Object> validateAttempts(@RequestParam  String login){
         UserInventory userInventory= userInventoryService.findUser(login);
         if(userInventory.getNumberOfLoginTries()>=3){
             userInventory.setStatus(false);
@@ -142,6 +144,9 @@ public class UserInventoryController {
             return  new ResponseEntity<>("A exceeded the allowed attempts. Your account has been blocked.", HttpStatus.FORBIDDEN);
 
         }
+        int updatedAttempts=userInventory.getNumberOfLoginTries()+1;
+        userInventory.setNumberOfLoginTries(updatedAttempts);
+        userInventoryService.inputUser(userInventory);
         return  new ResponseEntity<>("Failed login attempts." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
     }
 
@@ -150,6 +155,7 @@ public class UserInventoryController {
         UserInventory userInventory= userInventoryService.findUser(login);
         if(!userInventory.isStatus()){
             userInventory.setStatus(true);
+            userInventory.setNumberOfLoginTries(0);
             userInventoryService.inputUser(userInventory);
             return  new ResponseEntity<>("The account has been activated", HttpStatus.FORBIDDEN);
 
@@ -157,6 +163,15 @@ public class UserInventoryController {
         return  new ResponseEntity<>("The account is active." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
     }
 
+    @GetMapping("/api/users")
+    public List<UserDTO> getUsers(){
+        return userInventoryService.getUsersDTO();
+    }
+
+    @GetMapping("/api/user/current")
+    public UserDTO getUser(Authentication authentication){
+        return userInventoryService.getUserDTO(authentication);
+    }
 
     //====================================AUDIT METHODS===============================//♠
     private void registerModifyUser(String login) throws UnknownHostException {
