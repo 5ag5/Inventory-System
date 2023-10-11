@@ -84,6 +84,7 @@ public class ParameterController {
         return new ResponseEntity<>("Parameter Created", HttpStatus.ACCEPTED);
     }
 
+
     @PatchMapping("api/parameter/modifyParameter")
     public ResponseEntity<Object> modifyParamter(@RequestParam String nameParameter, @RequestParam String valueParameter,
                                                  Authentication authenticated) throws UnknownHostException {
@@ -111,6 +112,8 @@ public class ParameterController {
         return new ResponseEntity<>("Parameter Modified", HttpStatus.ACCEPTED);
     }
 
+
+
     @PatchMapping("/api/parameter/deleteParameter")
     public ResponseEntity<Object> deleteParameter(Authentication authenticated, @RequestParam String nameParameter) throws UnknownHostException {
         Parameter parameterTemp = parameterService.findParameterByName(nameParameter);
@@ -128,6 +131,7 @@ public class ParameterController {
 
         return new ResponseEntity<>("Parameter Erased", HttpStatus.ACCEPTED);
     }
+
 
     @GetMapping("/parameter/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
@@ -159,7 +163,7 @@ public class ParameterController {
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);
         LocalDateTime dateTime2 = LocalDateTime.parse(endDate + " 23:59", formatter);*/
 
-        response.setHeader(headerKey,headerValue);
+        response.setHeader(headerKey, headerValue);
 
         Set<ParameterDTO> parameterList = parameterService.findAllParameters().stream().map(parameter -> new ParameterDTO(parameter)).collect(Collectors.toSet());
 
@@ -168,25 +172,27 @@ public class ParameterController {
         logger.info("EXPORTED PDF OF PARAMETERS");
 
         exporter.export(response);
-
-    @PutMapping("/api/user/changes")
-    public ResponseEntity<Object> changeInfo(Authentication authentication,  @RequestParam Long id,
-                                             @RequestParam String parameterDescription,
-                                             @RequestParam boolean parameterStatus,
-                                             @RequestParam String nameParameter,
-                                             @RequestParam String  valueParameter){
-        Parameter parameter=parameterService.findById(id);
-        if(parameter!=null){
-            parameter.setParameterDescription(parameterDescription);
-            parameter.setParameterStatus(parameterStatus);
-            parameter.setNameParameter(nameParameter);
-            parameter.setValueParameter(valueParameter);
-            parameterService.saveParameter(parameter);
-            return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
-        }
-       return  new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
-
     }
+
+    @PutMapping(path="/api/user/changes")
+        public ResponseEntity<Object> changeInfo(Authentication authentication,
+                @RequestParam Long id,
+                @RequestParam String parameterDescription,
+                @RequestParam boolean parameterStatus,
+                @RequestParam String nameParameter,
+                @RequestParam String  valueParameter){
+            Parameter parameter=parameterService.findById(id);
+            if(parameter!=null){
+                parameter.setParameterDescription(parameterDescription);
+                parameter.setParameterStatus(parameterStatus);
+                parameter.setNameParameter(nameParameter);
+                parameter.setValueParameter(valueParameter);
+                parameterService.saveParameter(parameter);
+                return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
+            }
+            return  new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
+
+        }
 
     //=========================================AUDIT METHODS=======================================//
 
@@ -240,3 +246,6 @@ public class ParameterController {
         auditService.saveAudit(auditTemp);     }
 
 }
+
+
+

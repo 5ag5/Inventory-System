@@ -172,7 +172,7 @@ public class UserInventoryController {
         userInventoryService.inputUser(userInventory);
         logger.info("VALIDATED LOGIN ATTEMTPS");
 
-        return  new ResponseEntity<>("Failed login attempts." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
+        return  new ResponseEntity<>("Failed login attempts " +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
     }
 
     @PatchMapping("api/users/blockUser")
