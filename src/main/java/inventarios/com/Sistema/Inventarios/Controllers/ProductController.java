@@ -25,10 +25,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -38,6 +41,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static javax.crypto.Cipher.getInstance;
 
 
 @RestController
@@ -91,58 +96,7 @@ public class ProductController {
         exporter.export(response);
     }
 
-    //=================================AUDIT METHODS==============================//
 
-    private void registerProductAudit(String login) throws UnknownHostException {
-        UserInventory user = userInventoryService.findUser(login);
-
-        Audit auditTemp = new Audit(
-                ActionAudit.INSERT,
-                String.valueOf(InetAddress.getLocalHost()),
-                LocalDate.now(),
-                tableNames.PRODUCT.getIdTable(),
-                user.getId(),
-                tableNames.PRODUCT
-        );
-
-        user.addAudit(auditTemp);
-        userInventoryService.modifyUser(user);
-        auditService.saveAudit(auditTemp);
-    }
-
-    private void modifyProductAudit(String login) throws UnknownHostException{
-        UserInventory user = userInventoryService.findUser(login);
-
-        Audit auditTemp = new Audit(
-                ActionAudit.UPDATE,
-                String.valueOf(InetAddress.getLocalHost()),
-                LocalDate.now(),
-                tableNames.PRODUCT.getIdTable(),
-                user.getId(),
-                tableNames.PRODUCT
-        );
-
-        user.addAudit(auditTemp);
-        userInventoryService.modifyUser(user);
-        auditService.saveAudit(auditTemp);
-    }
-
-    private void deleteProductAudit(String login) throws UnknownHostException{
-        UserInventory user = userInventoryService.findUser(login);
-
-        Audit auditTemp = new Audit(
-                ActionAudit.DELETE,
-                String.valueOf(InetAddress.getLocalHost()),
-                LocalDate.now(),
-                tableNames.PRODUCT.getIdTable(),
-                user.getId(),
-                tableNames.PRODUCT
-        );
-
-        user.addAudit(auditTemp);
-        userInventoryService.modifyUser(user);
-        auditService.saveAudit(auditTemp);
-    }
 
     @GetMapping("/api/products")
     public List<ProductDTO> getProducts(){
@@ -150,18 +104,21 @@ public class ProductController {
     }
 
     @PatchMapping("/api/products/state")
-    public ResponseEntity<Object> changeProductStatus( @RequestParam Long id){
+    public ResponseEntity<Object> changeProductStatus(Authentication authentication, @RequestParam Long id) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserInventory user = userInventoryService.getAuthenticatedUser(authentication);
         Product product= productService.finProducById(id);
         if(product==null){
             return new ResponseEntity<>("The product does not exist ", HttpStatus.FORBIDDEN);
         }
         product.setStatusProduct(false);
         productService.inputProduct(product);
+        deleteProductAudit(user.getLogin());
         return new ResponseEntity<>("The product was eliminated",HttpStatus.OK);
     }
 
     @PostMapping("/api/products")
-    public ResponseEntity<Object> newProduct(Authentication authentication, @RequestParam String descriptionProduct, @RequestParam int cantidadProduct, @RequestParam double precioCompra, @RequestParam double precioVenta,@RequestParam int minimumStock,@RequestParam int maximumStock,@RequestParam boolean includesIVA){
+    public ResponseEntity<Object> newProduct(Authentication authentication, @RequestParam String descriptionProduct, @RequestParam int cantidadProduct, @RequestParam double precioCompra, @RequestParam double precioVenta,@RequestParam int minimumStock,@RequestParam int maximumStock,@RequestParam boolean includesIVA) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserInventory user = userInventoryService.getAuthenticatedUser(authentication);
         if(descriptionProduct.isBlank()){
             return new ResponseEntity<>("The description cannot be empty",HttpStatus.FORBIDDEN);
         }
@@ -185,6 +142,7 @@ public class ProductController {
         }
         Product product=new Product(descriptionProduct,  cantidadProduct,  precioCompra,  precioVenta, minimumStock,  maximumStock,  includesIVA);
         productService.inputProduct(product);
+        registerProductAudit(user.getLogin());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -197,7 +155,10 @@ public class ProductController {
                                                 @RequestParam double precioVenta,
                                                 @RequestParam int minimumStock,
                                                 @RequestParam  int maximumStock,
-                                                @RequestParam boolean includesIVA){
+                                                @RequestParam boolean includesIVA) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+
+        UserInventory user = userInventoryService.getAuthenticatedUser(authentication);
+
         Product product= productService.finProducById(id);
         if(product!=null){
                 product.setDescriptionProduct(descriptionProduct);
@@ -209,9 +170,88 @@ public class ProductController {
                 product.setMinimumStock(maximumStock);
                 product.setIncludesIVA(includesIVA);
                 productService.inputProduct(product);
+                modifyProductAudit(user.getLogin());
+
                 return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
         }
             return new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
 
+    }
+
+    //=================================AUDIT METHODS==============================//
+
+    private void registerProductAudit(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey secretKey = keyGenerator.generateKey();
+        Cipher cipher = getInstance("AES");
+
+        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        byte [] bytesEncrypted = cipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
+        UserInventory user = userInventoryService.findUser(login);
+
+        Audit auditTemp = new Audit(
+                ActionAudit.INSERT,
+                textEncrypted,
+                LocalDate.now(),
+                tableNames.PRODUCT.getIdTable(),
+                user.getId(),
+                tableNames.PRODUCT
+        );
+
+        user.addAudit(auditTemp);
+        userInventoryService.modifyUser(user);
+        auditService.saveAudit(auditTemp);
+    }
+
+    private void modifyProductAudit(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey secretKey = keyGenerator.generateKey();
+        Cipher cipher = getInstance("AES");
+
+        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        byte [] bytesEncrypted = cipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
+        UserInventory user = userInventoryService.findUser(login);
+
+        Audit auditTemp = new Audit(
+                ActionAudit.UPDATE,
+                textEncrypted,
+                LocalDate.now(),
+                tableNames.PRODUCT.getIdTable(),
+                user.getId(),
+                tableNames.PRODUCT
+        );
+
+        user.addAudit(auditTemp);
+        userInventoryService.modifyUser(user);
+        auditService.saveAudit(auditTemp);
+    }
+
+    private void deleteProductAudit(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey secretKey = keyGenerator.generateKey();
+        Cipher cipher = getInstance("AES");
+
+        cipher.init(Cipher.ENCRYPT_MODE,secretKey);
+        byte [] encryptedBytes = cipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(encryptedBytes);
+
+        UserInventory user = userInventoryService.findUser(login);
+
+        Audit auditTemp = new Audit(
+                ActionAudit.DELETE,
+                textEncrypted,
+                LocalDate.now(),
+                tableNames.PRODUCT.getIdTable(),
+                user.getId(),
+                tableNames.PRODUCT
+        );
+
+        user.addAudit(auditTemp);
+        userInventoryService.modifyUser(user);
+        auditService.saveAudit(auditTemp);
     }
 }

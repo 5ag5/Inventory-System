@@ -118,6 +118,13 @@ public class GraphicsController {
                     elementsArguments.add(String.valueOf(auditTemp.getNombreTabla()));
                 }
                 break;
+            case "Computer IPs":
+                for(Audit audit: namesCategories){
+                    namesArgument.add(String.valueOf(audit.getDireccionID()));
+                    elementsArguments.add(String.valueOf(audit.getDireccionID()));
+                }
+                break;
+
         }
 
         logger.info("Audit Graphs Created");
@@ -204,7 +211,7 @@ public class GraphicsController {
             case "status":
                 for (UserInventory user : listUsers) {
                     pieInfo.add(String.valueOf(user.isStatus()));
-                    nameParameters.add(String.valueOf(user.getUserType()));
+                    nameParameters.add(String.valueOf(user.isStatus()));
                 }
             break;
         }

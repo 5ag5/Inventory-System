@@ -76,8 +76,5 @@ public class ProductDTO {
     public boolean isIncludesIVA() {
         return includesIVA;
     }
-
-    public Long getId() {
-        return id;
-    }
+    
 }

@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.net.InetAddress;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.crypto.Cipher.*;
 
 @SpringBootApplication
 public class SistemaInventariosApplication {
@@ -32,6 +37,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 								  CategoryRepository categoryRepository,
 								  AuditRepository auditRepository){
  return (args) -> {
+
 	UserInventory user1 = new UserInventory("user11","Gonzalez", passwordEncoder.encode("user11"),"correo1@gmail.com", UserType.ADMIN);
 	UserInventory user2 = new UserInventory("user22","Garcia",passwordEncoder.encode("user456"),"correo2@gmail.com",UserType.CASHIER);
 	 UserInventory user3 = new UserInventory("user33","Guzman",passwordEncoder.encode("user789"),"correo3@gmail.com",UserType.WORKER);
@@ -68,9 +74,17 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 parameterRepository.save(parameter2);
 	 parameterRepository.save(parameter3);
 
+	 KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+	 SecretKey myDesKey = keyGenerator.generateKey();
+	 Cipher desCipher = getInstance("AES");
+	 desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+	 byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+	 String textEncrypted = new String(bytesEncrypted);
+
 	 Audit audit1 = new Audit(
 			 ActionAudit.UPDATE,
-			 String.valueOf(InetAddress.getLocalHost()),
+			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
 			 2L,
@@ -79,7 +93,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Audit audit2 = new Audit(
 			 ActionAudit.INSERT,
-			 String.valueOf(InetAddress.getLocalHost()),
+			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
 			 2L,
@@ -87,7 +101,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Audit audit3 = new Audit(
 			 ActionAudit.DELETE,
-			 String.valueOf(InetAddress.getLocalHost()),
+			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
 			 2L,
@@ -95,7 +109,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Audit audit4 = new Audit(
 			 ActionAudit.EXIT,
-			 String.valueOf(InetAddress.getLocalHost()),
+			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
 			 3L,
@@ -103,7 +117,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Audit audit5 = new Audit(
 			 ActionAudit.LOGIN,
-			 String.valueOf(InetAddress.getLocalHost()),
+			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
 			 3L,
@@ -111,7 +125,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Audit audit6 = new Audit(
 			 ActionAudit.LOGIN,
-			 String.valueOf(InetAddress.getLocalHost()),
+			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
 			 3L,

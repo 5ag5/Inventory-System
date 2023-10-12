@@ -21,10 +21,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -33,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static javax.crypto.Cipher.getInstance;
 
 @RestController
 public class ParameterController {
@@ -59,7 +64,7 @@ public class ParameterController {
     }
 
     @PostMapping("/api/parameter/createParameter")
-    public ResponseEntity<Object> createParameter(@RequestBody Parameter parameter, Authentication authenticated) throws UnknownHostException {
+    public ResponseEntity<Object> createParameter(@RequestBody Parameter parameter, Authentication authenticated) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         List<ParameterDTO> listParameters = parameterService.getAllParameterDTO();
 
         UserInventory userLoggedIn = userInventoryService.getAuthenticatedUser(authenticated);
@@ -85,8 +90,8 @@ public class ParameterController {
     }
 
     @PatchMapping("api/parameter/modifyParameter")
-    public ResponseEntity<Object> modifyParamter(@RequestParam String nameParameter, @RequestParam String valueParameter,
-                                                 Authentication authenticated) throws UnknownHostException {
+    public ResponseEntity<Object> modifyParameter(@RequestParam String nameParameter, @RequestParam String valueParameter,
+                                                 Authentication authenticated) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         List<ParameterDTO> listParameters = parameterService.getAllParameterDTO();
         UserInventory userLoggedIn = userInventoryService.getAuthenticatedUser(authenticated);
@@ -112,7 +117,7 @@ public class ParameterController {
     }
 
     @PatchMapping("/api/parameter/deleteParameter")
-    public ResponseEntity<Object> deleteParameter(Authentication authenticated, @RequestParam String nameParameter) throws UnknownHostException {
+    public ResponseEntity<Object> deleteParameter(Authentication authenticated, @RequestParam String nameParameter) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         Parameter parameterTemp = parameterService.findParameterByName(nameParameter);
         UserInventory userTemp = userInventoryService.getAuthenticatedUser(authenticated);
 
@@ -159,7 +164,7 @@ public class ParameterController {
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);
         LocalDateTime dateTime2 = LocalDateTime.parse(endDate + " 23:59", formatter);*/
 
-        response.setHeader(headerKey,headerValue);
+        response.setHeader(headerKey, headerValue);
 
         Set<ParameterDTO> parameterList = parameterService.findAllParameters().stream().map(parameter -> new ParameterDTO(parameter)).collect(Collectors.toSet());
 
@@ -168,13 +173,17 @@ public class ParameterController {
         logger.info("EXPORTED PDF OF PARAMETERS");
 
         exporter.export(response);
+    }
 
-    @PutMapping("/api/user/changes")
-    public ResponseEntity<Object> changeInfo(Authentication authentication,  @RequestParam Long id,
+    @PutMapping(path="/api/user/changes")
+    public ResponseEntity<Object> changeInfo(Authentication authentication,
+                                             @RequestParam Long id,
                                              @RequestParam String parameterDescription,
                                              @RequestParam boolean parameterStatus,
                                              @RequestParam String nameParameter,
-                                             @RequestParam String  valueParameter){
+                                             @RequestParam String  valueParameter) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserInventory user = userInventoryService.getAuthenticatedUser(authentication);
+
         Parameter parameter=parameterService.findById(id);
         if(parameter!=null){
             parameter.setParameterDescription(parameterDescription);
@@ -182,6 +191,8 @@ public class ParameterController {
             parameter.setNameParameter(nameParameter);
             parameter.setValueParameter(valueParameter);
             parameterService.saveParameter(parameter);
+            AuditRegisterModifyParameter(user.getLogin());
+
             return new ResponseEntity<>("the information has been modified", HttpStatus.OK);
         }
        return  new ResponseEntity<>("the product does not exist", HttpStatus.FORBIDDEN);
@@ -190,12 +201,20 @@ public class ParameterController {
 
     //=========================================AUDIT METHODS=======================================//
 
-    private void AuditRegisterInputParameter(String login) throws UnknownHostException {
+    private void AuditRegisterInputParameter(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey myDesKey = keyGenerator.generateKey();
+        Cipher desCipher = getInstance("AES");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+        byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
         UserInventory userTemp = userInventoryService.findUser(login);
 
         Audit auditTemp = new Audit(
                 ActionAudit.INSERT,
-                String.valueOf(InetAddress.getLocalHost()),
+                textEncrypted,
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
                 userTemp.getId(),
@@ -207,12 +226,20 @@ public class ParameterController {
         auditService.saveAudit(auditTemp);
     }
 
-    private void AuditRegisterModifyParameter(String login) throws UnknownHostException {
+    private void AuditRegisterModifyParameter(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey myDesKey = keyGenerator.generateKey();
+        Cipher desCipher = getInstance("AES");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+        byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
         UserInventory userTemp = userInventoryService.findUser(login);
 
         Audit auditTemp = new Audit(
                 ActionAudit.UPDATE,
-                String.valueOf(InetAddress.getLocalHost()),
+                textEncrypted,
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
                 userTemp.getId(),
@@ -223,12 +250,20 @@ public class ParameterController {
         userInventoryService.modifyUser(userTemp);
         auditService.saveAudit(auditTemp);     }
 
-    private void AuditRegisterDeleteParameter(String login) throws UnknownHostException {
+    private void AuditRegisterDeleteParameter(String login) throws UnknownHostException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey myDesKey = keyGenerator.generateKey();
+        Cipher desCipher = getInstance("AES");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+        byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
         UserInventory userTemp = userInventoryService.findUser(login);
 
         Audit auditTemp = new Audit(
                 ActionAudit.DELETE,
-                String.valueOf(InetAddress.getLocalHost()),
+                textEncrypted,
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
                 userTemp.getId(),

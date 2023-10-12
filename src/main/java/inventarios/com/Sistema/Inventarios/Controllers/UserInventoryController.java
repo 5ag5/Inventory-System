@@ -23,10 +23,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -36,6 +39,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static javax.crypto.Cipher.getInstance;
 
 
 @RestController
@@ -56,12 +61,20 @@ public class UserInventoryController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("api/userInventory/loginRegister")
-    public ResponseEntity<Object> registerLogin(@RequestParam String login) throws UnknownHostException {
+    public ResponseEntity<Object> registerLogin(@RequestParam String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey myDesKey = keyGenerator.generateKey();
+        Cipher desCipher = getInstance("AES");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+        byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
         UserInventory userTemp = userInventoryService.findUser(login);
 
         Audit auditLogin = new Audit(
                 ActionAudit.LOGIN,
-               String.valueOf(InetAddress.getLocalHost()),
+                textEncrypted,
                 LocalDate.now(),
                 tableNames.LOGIN.getIdTable(),
                 userTemp.getId(),
@@ -91,7 +104,7 @@ public class UserInventoryController {
     public ResponseEntity<Object> register(@RequestParam String login,
                                            @RequestParam  String lastName,
                                            @RequestParam String email,
-                                           @RequestParam UserType userType){
+                                           @RequestParam UserType userType) throws UnknownHostException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         String passwordBeforeEncrypting=UserInventoryUtils.generateRandomPassword(8);
         if(login.isBlank()){
             return new ResponseEntity<>("The name can't be empty", HttpStatus.FORBIDDEN);
@@ -120,6 +133,7 @@ public class UserInventoryController {
         emailService.sendEmail(emailDTO);
 
         logger.info("NEW USER REGISTERED");
+        registerNewUserUser(login);
 
         return new ResponseEntity<>("Se envio la contraseña a su correo "+ passwordBeforeEncrypting,HttpStatus.CREATED);
     }
@@ -127,7 +141,7 @@ public class UserInventoryController {
 
 
     @PatchMapping("/api/users/password")
-    public ResponseEntity<Object> changePassword(Authentication authentication, @RequestParam String password, @RequestParam String oldPassword){
+    public ResponseEntity<Object> changePassword(Authentication authentication, @RequestParam String password, @RequestParam String oldPassword) throws UnknownHostException {
         UserInventory userInventory=userInventoryService.getAuthenticatedUser(authentication);
         if(!passwordEncoder.matches(oldPassword,userInventory.getPassword())){
             return new ResponseEntity<>("Incorrect password above, please correct it..", HttpStatus.FORBIDDEN);
@@ -151,6 +165,7 @@ public class UserInventoryController {
         userInventoryService.inputUser(userInventory);
 
         logger.info("PASSWORD CHANGED");
+        registerModifyUser(userInventory.getLogin());
 
         return new ResponseEntity<>("password has been changed", HttpStatus.OK);
     }
@@ -176,7 +191,7 @@ public class UserInventoryController {
     }
 
     @PatchMapping("api/users/blockUser")
-    public ResponseEntity<Object> blockUser(@RequestParam String login){
+    public ResponseEntity<Object> blockUser(@RequestParam String login) throws UnknownHostException {
         UserInventory userInventory= userInventoryService.findUser(login);
 
         if(userInventory == null){
@@ -187,12 +202,13 @@ public class UserInventoryController {
         userInventoryService.inputUser(userInventory);
 
         logger.info("USER BLOCKED");
+        registerModifyUser(login);
 
         return  new ResponseEntity<>("User Blocked" +userInventory.getNumberOfLoginTries(), HttpStatus.ACCEPTED);
     }
 
     @PatchMapping("/api/users/activateAccount ")
-    public ResponseEntity<Object> activateAccount(String login){
+    public ResponseEntity<Object> activateAccount(String login) throws UnknownHostException {
         UserInventory userInventory= userInventoryService.findUser(login);
         if(!userInventory.isStatus()){
             userInventory.setStatus(true);
@@ -203,6 +219,7 @@ public class UserInventoryController {
         }
 
         logger.info("ADMIN ACTIVATED ACCOUNT");
+        registerModifyUser(login);
 
         return  new ResponseEntity<>("The account is active." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
     }
@@ -255,7 +272,7 @@ public class UserInventoryController {
     }
 
 
-    //====================================AUDIT METHODS===============================//♠
+    //====================================AUDIT METHODS==========================================
     private void registerModifyUser(String login) throws UnknownHostException {
         UserInventory userTemp = userInventoryService.findUser(login);
         Audit auditTemp = new Audit(
@@ -271,11 +288,19 @@ public class UserInventoryController {
         auditService.saveAudit(auditTemp);
     }
 
-    private void registerNewUserUser(String login) throws UnknownHostException {
+    private void registerNewUserUser(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey myDesKey = keyGenerator.generateKey();
+        Cipher desCipher = getInstance("AES");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+        byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
         UserInventory userTemp = userInventoryService.findUser(login);
         Audit auditTemp = new Audit(
                 ActionAudit.INSERT,
-                String.valueOf(InetAddress.getLocalHost()),
+                textEncrypted,
                 LocalDate.now(),
                 tableNames.USERINVENTORY.getIdTable(),
                 0L,
@@ -286,11 +311,19 @@ public class UserInventoryController {
         auditService.saveAudit(auditTemp);
     }
 
-    private void registerDeleteUser(String login) throws UnknownHostException {
+    private void registerDeleteUser(String login) throws UnknownHostException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecretKey myDesKey = keyGenerator.generateKey();
+        Cipher desCipher = getInstance("AES");
+        desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+
+        byte []bytesEncrypted = desCipher.doFinal(String.valueOf(InetAddress.getLocalHost()).getBytes());
+        String textEncrypted = new String(bytesEncrypted);
+
         UserInventory userTemp = userInventoryService.findUser(login);
         Audit auditTemp = new Audit(
                 ActionAudit.DELETE,
-                String.valueOf(InetAddress.getLocalHost()),
+                textEncrypted,
                 LocalDate.now(),
                 tableNames.USERINVENTORY.getIdTable(),
                 0L,
