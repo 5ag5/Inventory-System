@@ -54,10 +54,12 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 Product fifa2023 = new Product("football game created by EA Sports",45,10.00,40.00,
 			 3,1000,true);
 
-	 List<Character> ans = new ArrayList<Character>();
+	 Product nikeSnickers = new Product("Snicker AIr Force snickers",550,150.00,400.00,
+			 15,1000,true);
 
 	 productRepository.save(cavages);
 	 productRepository.save(fifa2023);
+	 productRepository.save(nikeSnickers);
 
 	 vegetables.addProduct(cavages);
 	 videoGames.addProduct(fifa2023);
@@ -89,7 +91,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 tableNames.USERINVENTORY.getIdTable(),
 			 2L,
 			 tableNames.USERINVENTORY);
-
+	cavages.addAudit(audit1);
 
 	 Audit audit2 = new Audit(
 			 ActionAudit.INSERT,
@@ -98,6 +100,8 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 tableNames.USERINVENTORY.getIdTable(),
 			 2L,
 			 tableNames.USERINVENTORY);
+	 cavages.addAudit(audit2);
+
 
 	 Audit audit3 = new Audit(
 			 ActionAudit.DELETE,
@@ -106,6 +110,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 tableNames.USERINVENTORY.getIdTable(),
 			 2L,
 			 tableNames.USERINVENTORY);
+	 nikeSnickers.addAudit(audit3);
 
 	 Audit audit4 = new Audit(
 			 ActionAudit.EXIT,
@@ -131,6 +136,9 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 3L,
 			 tableNames.USERINVENTORY);
 
+	 productRepository.save(cavages);
+	 productRepository.save(fifa2023);
+	 productRepository.save(nikeSnickers);
 
 	 user2.addAudit(audit1);
 	 user2.addAudit(audit2);

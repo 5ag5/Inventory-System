@@ -27,27 +27,36 @@
           </nav>
     </header>
     <main id="app">
-      <h1 id="titleH1">GRAPHS/REPORTS</h1>
+      <h1 id="titleH1">GRAPHS AND ESTATISTICS</h1>
       <div id="DIVContainerInputGraphs">
         <div id="DIVInputGraphs">
           <div class="dropdown">
             <button id="buttonsGraphs" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Input Type
+              Type of Graph
             </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu" v-model="choiceGraph">
+              <li value="Pie Chart"><a class="dropdown-item" href="#" v-on:click="TypeOfGraphSelected('Pie Chart')">Pie Chart</a></li>
+              <li value="Line Chart"><a class="dropdown-item" href ="#" v-on:click="TypeOfGraphSelected('Line Chart')">Line Chart</a></li>
             </ul>
           </div>
           <div class="dropdown">
             <button id="buttonsGraphs" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Choose Parameter
+              Type of Entity
             </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu" >
+              <li><a class="dropdown-item" href="#" value="Action" v-on:click="typeOfEntitySelected('Users')">User</a></li>
+              <li><a class="dropdown-item" href="#" value="Action" v-on:click="typeOfEntitySelected('Products')">Product</a></li>
+              <li><a class="dropdown-item" href="#" value="Action" v-on:click="typeOfEntitySelected('Audits')">Audit</a></li>
+            </ul>
+          </div>
+          <div class="dropdown">
+            <button id="buttonsGraphs" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Parameter to Search
+            </button>
+            <ul class="dropdown-menu" >
+              <li><a class="dropdown-item" href="#" value="Action">User</a></li>
+              <li><a class="dropdown-item" href="#" value="Action">Product</a></li>
+              <li><a class="dropdown-item" href="#" value="Action">Audit</a></li>
             </ul>
           </div>
           <button type="button" class="btn btn-primary" id="executeGraphs">Execute</button>

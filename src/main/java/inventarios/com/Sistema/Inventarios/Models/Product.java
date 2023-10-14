@@ -142,7 +142,7 @@ public class Product {
         this.auditories = auditories;
     }
 
-    public void addProduct(Audit audit){
+    public void addAudit(Audit audit){
         audit.setProduct(this);
         auditories.add(audit);
     }

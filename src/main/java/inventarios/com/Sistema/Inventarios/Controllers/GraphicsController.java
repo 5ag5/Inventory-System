@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class GraphicsController {
@@ -39,13 +36,31 @@ public class GraphicsController {
         return "index";
     }
 
+    @GetMapping("api/graphs/optionsLineGraphs")
+    public Map<String, String []> optionsGraphs(){
+        Map<String, String []> options = new HashMap<>();
+        options.put("Users", new String[] {"Date Registered", "status", "Last Registered Date", "User Type"});
+        options.put("Products", new String[] {"Action Audit","Audit Date","ID Table", "ID User","Table Names","Computer IPs"});
+        options.put("Audits", new String[] {"Status Product", "Quantity Product", "Price Purchase", "Price Sell", "Minimum Stock", "Maximum Stock", "Includes IVA"});
+        return options;
+    }
+
+    @GetMapping("api/graphs/optionsPieChart")
+    public  Map<String, String []> optionsPieChart(){
+        Map<String, String []> options = new HashMap<>();
+        options.put("Users", new String[] {"User Type, status"});
+        options.put("Products", new String[] {"Audit, ID User, Audit Date"});
+        options.put("Audits", new String[] {"Status, Includes IVA, Category Product"});
+
+        return options;
+    }
+
     @GetMapping("api/graphs/UserGraphsCount/{nameArgument}")
-    public String[][] listaPrueba(@PathVariable String nameArgument) {
+    public String[][] userGraph(@PathVariable String nameArgument) {
 
         List<UserInventory> namesCategories = userInventoryService.findAllUsers();
         Set<String> namesArgument = new HashSet<>();
         List<String> elementsArguments = new ArrayList<>();
-        int sizeArray = 0;
 
         switch (nameArgument) {
             case "Date Registered":
@@ -94,13 +109,13 @@ public class GraphicsController {
                     elementsArguments.add(String.valueOf(auditTemp.getActionAudit()));
                 }
                 break;
-            case "Fecha Auditoria":
+            case "Audit Date":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getFechaAuditoria()));
                     elementsArguments.add(String.valueOf(auditTemp.getFechaAuditoria()));
                 }
                 break;
-            case "id Table":
+            case "ID Table":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getIdTabla()));
                     elementsArguments.add(String.valueOf(auditTemp.getIdTabla()));
@@ -159,7 +174,7 @@ public class GraphicsController {
                     elementsArguments.add(String.valueOf(productTemp.getPrecioCompra()));
                 }
                 break;
-            case "Precio Venta":
+            case "Price Sell":
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.getPrecioVenta()));
                     elementsArguments.add(String.valueOf(productTemp.getPrecioVenta()));
@@ -199,7 +214,6 @@ public class GraphicsController {
         List<String> pieInfo = new ArrayList<>();
         Set<String> nameParameters = new HashSet<>();
 
-
         switch (nameArgument) {
             case "User Type":
                 for (UserInventory user : listUsers) {
@@ -208,7 +222,7 @@ public class GraphicsController {
                 }
             break;
 
-            case "status":
+            case "Status":
                 for (UserInventory user : listUsers) {
                     pieInfo.add(String.valueOf(user.isStatus()));
                     nameParameters.add(String.valueOf(user.isStatus()));
@@ -218,4 +232,66 @@ public class GraphicsController {
 
         return GraphsUtils.getPieChart(pieInfo,nameParameters);
     }
+
+    @GetMapping("api/graphs/AuditPieChart/{nameArgument}")
+    public List<slicePie> getPieAuditInfo(@PathVariable String nameArgument){
+        List<Audit> listAudits = auditService.findAllAudit();
+        List<String> pieInfo = new ArrayList<>();
+        Set<String> nameParameters = new HashSet<>();
+
+        switch (nameArgument){
+            case "Action":
+                for(Audit audit: listAudits){
+                    pieInfo.add(String.valueOf(audit.getActionAudit()));
+                    nameParameters.add(String.valueOf(audit.getActionAudit()));
+                }
+            break;
+
+            case "ID User":
+                for(Audit audit: listAudits){
+                    pieInfo.add(String.valueOf(audit.getIdUsuario()));
+                    nameParameters.add(String.valueOf(audit.getIdUsuario()));
+                }
+            break;
+
+            case "Audit Date":
+                for(Audit audit: listAudits){
+                    pieInfo.add(String.valueOf(audit.getFechaAuditoria()));
+                    nameParameters.add(String.valueOf(audit.getFechaAuditoria()));
+                }
+            break;
+        }
+        return GraphsUtils.getPieChart(pieInfo,nameParameters);
+    }
+
+    @GetMapping("api/graphs/ProductPieChart/{nameArgument}")
+    public List<slicePie> getPieProductInfo(@PathVariable String nameArgument){
+    List<Product> listProducts = productService.findAllProducts();
+    List<String> pieInfo = new ArrayList<>();
+    Set<String> nameParameters = new HashSet<>();
+
+    switch(nameArgument){
+        case "Status":
+            for(Product product: listProducts){
+                pieInfo.add(String.valueOf(product.isStatusProduct()));
+                nameParameters.add(String.valueOf(product.isStatusProduct()));
+            }
+        break;
+        case "Includes IVA":
+            for(Product product: listProducts){
+                pieInfo.add(String.valueOf(product.isIncludesIVA()));
+                nameParameters.add(String.valueOf(product.isIncludesIVA()));
+            }
+        break;
+        case "Category Product":
+            for(Product product:listProducts){
+                pieInfo.add(String.valueOf(product.getCategory()));
+                nameParameters.add(String.valueOf(product.getCategory()));
+            }
+        break;
+    }
+    return GraphsUtils.getPieChart(pieInfo, nameParameters);
+    }
+
+
 }

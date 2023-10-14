@@ -33,7 +33,7 @@ public class Audit {
 
     }
 
-    public Audit(ActionAudit actionAudit, String direccionID,LocalDate fechaAuditoria,  Long idTabla, Long idUsuario, tableNames tableNames) {
+    public Audit(ActionAudit actionAudit, String direccionID,LocalDate fechaAuditoria, Long idTabla, Long idUsuario, tableNames tableNames) {
         this.actionAudit=actionAudit;
         this.direccionID=direccionID;
         this.fechaAuditoria=fechaAuditoria;
