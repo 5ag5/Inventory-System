@@ -31,7 +31,7 @@
                             <a class="nav-link buttonNav" href="#">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link buttonNav" href="">Parameters</a>
+                            <a class="nav-link buttonNav" href="./products.html">Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link buttonNav" href="">Categories</a>
@@ -42,6 +42,7 @@
               </nav>
         </header>
         <main>
+          <div class="container">
             <label for="" class="colorW">Name Parameter:</label>
             <div class="mb-4 pt-2">
                 <select class="select"  v-model="parameter"  >
@@ -50,27 +51,27 @@
             </div>
             <div class="lightBlueBackground" v-if="parameter!=null">
                 <div class="d-flex">
-                    <p>Id</p>
+                    <p>Id: </p>
                     <p>{{parameter.id}}</p>
                 </div>
                
                 <div class="d-flex">
-                    <p>Description</p>
+                    <p>Description: </p>
                     <p>{{parameter.parameterDescription}}</p>
                 </div>
 
                 <div class="d-flex">
-                    <p>Status</p>
+                    <p>Status: </p>
                     <p>{{parameter.parameterStatus}}</p>
                 </div>
                  
                 <div class="d-flex">
-                    <p>Name</p>
+                    <p>Name: </p>
                     <p>{{parameter.nameParameter}}</p>
                 </div>
 
                 <div class="d-flex">
-                    <p>Value</p>
+                    <p>Value: </p>
                     <p>{{parameter.valueParameter}}</p>
                 </div>
                 
@@ -123,6 +124,7 @@
               </div>
             </div>
         </div>
+      </div>
         </main>
         <footer>
     

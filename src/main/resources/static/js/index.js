@@ -22,7 +22,7 @@ const app=createApp({
                 timer: 2000,
               }).then(() => window.location.href = "/userAccount.html")
             })
-            .catch(
+            .catch(error=>{
               axios.patch('/api/users/validateAttempts', `login=${this.login}`)
               .catch(error=>{
                 Swal.fire({
@@ -34,7 +34,7 @@ const app=createApp({
                 console.log(error);
               })
             
-            )
+        })
             console.log(this.login+" "+this.password)
           }else{
           

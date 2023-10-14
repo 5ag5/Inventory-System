@@ -41,6 +41,9 @@ h1{
 }
 .lightBlueBackground{
     background-color: #DAFFFB;
+    width: 550px;
+    border-radius: 5px;
+    margin-bottom: 15px;
 }
 .buttonDelete{
     background-color: rgb(235, 72, 72);

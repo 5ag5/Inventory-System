@@ -31,7 +31,7 @@
                             <a class="nav-link buttonNav" href="#">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link buttonNav" href="">Parameters</a>
+                            <a class="nav-link buttonNav" href="./parameters.html">Parameters</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link buttonNav" href="">Categories</a>
@@ -42,6 +42,7 @@
               </nav>
         </header>
         <main>
+          <div class="container">
             <label for="" class="colorW">Description product:</label>
             <div class="mb-4 pt-2">
                 <select class="select"  v-model="product"  >
@@ -50,49 +51,49 @@
             </div>
             <div class="lightBlueBackground" v-if="product!=null">
                 <div class="d-flex">
-                    <p>Id</p>
+                    <p>Id: </p>
                     <p>{{product.id}}</p>
                 </div>
                
                 <div class="d-flex">
-                    <p>Description</p>
+                    <p>Description: </p>
                     <p>{{product.descriptionProduct}}</p>
                 </div>
 
                 <div class="d-flex">
-                    <p>Status Product</p>
+                    <p>Status Product<: /p>
                     <p>{{product.statusProduct}}</p>
                 </div>
                  
                 <div class="d-flex">
-                    <p>Quantity Product</p>
+                    <p>Quantity Product: </p>
                     <p>{{product.cantidadProduct}}</p>
                 </div>
 
                 <div class="d-flex">
-                    <p>Price Buy</p>
+                    <p>Price Buy: </p>
                     <p>{{product.precioCompra}}</p>
                 </div>
                 
 
                 <div class="d-flex">
-                    <p>Selling price</p>
+                    <p>Selling price: </p>
                     <p>{{product.precioVenta}}</p>    
                 </div>
 
                 
                 <div class="d-flex">
-                    <p>Maximun Stock</p>
+                    <p>Maximun Stock: </p>
                     <p>{{product.minimumStock}}</p>   
                 </div>
                
                 <div class="d-flex">
-                    <p>Minimum Stock</p>
+                    <p>Minimum Stock: </p>
                     <p>{{product.maximumStock}}</p>
                 </div>
 
                 <div class="d-flex">
-                    <p>Includes IVA</p>
+                    <p>Includes IVA: </p>
                     <p>{{product.includesIVA}}</p>
                 </div>
             </div>
@@ -162,6 +163,7 @@
                 </div>
               </div>
             </div>
+        </div>
         </div>
         </main>
         <footer>

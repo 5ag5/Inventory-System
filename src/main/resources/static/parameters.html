@@ -31,7 +31,7 @@
                         <a class="nav-link buttonNav" href="#">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link buttonNav" href="">Products</a>
+                        <a class="nav-link buttonNav" href="./products.html">Products</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link buttonNav" href="">Categories</a>
@@ -41,12 +41,15 @@
             </div>
           </nav>
         </header>
-        <main>
+        <main >
             <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            New Parameter
-          </button>
+          <div class="d-flex justify-content-around pt-4 pb-4"> 
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              New Parameter
+            </button>
 
+            <a href="./modifyParameter.html" class="btn btn-primary">Modify</a>
+          </div>     
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -77,7 +80,7 @@
               </div>
             </div>
         </div>
-        <button>Modify</button>
+       
             <!--Search-->
             <form class="d-flex container" role="search" id="search-title">
                 <input class="form-control me-2 colorFuchsia colorRadio" type="search" aria-label="Search" v-model="wordSearch">
@@ -103,7 +106,7 @@
                         <td>{{parameter.parameterStatus}}</td>
                         <td>{{parameter.nameParameter}}</td>
                         <td>{{parameter.valueParameter}}</td>
-                        <td> <a @click="deleteParameter(parameter.nameParameter)" class="btn ">Delete</a> </td>
+                        <td> <a @click="deleteParameter(parameter.nameParameter)"  class="btn buttonDelete">Delete</a> </td>
 
                        
                       </tr>

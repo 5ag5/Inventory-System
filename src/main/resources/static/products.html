@@ -31,7 +31,7 @@
                       <a class="nav-link buttonNav" href="#">Users</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link buttonNav" href="">Parameters</a>
+                      <a class="nav-link buttonNav" href="./parameters.html">Parameters</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link buttonNav" href="">Categories</a>
@@ -43,10 +43,14 @@
       </header>
       <main>
         
+        <div class="d-flex justify-content-around pt-4 pb-4">
         <!-- Button trigger modal -->
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Launch demo modal
+            New Product
           </button>
+
+          <a href="./modifyProduct.html" class="btn btn-primary ">Modify</a>
+        </div>  
 
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -99,7 +103,7 @@
               </div>
             </div>
         </div>
-        <button>Modify</button>
+        
         <form class="d-flex container" role="search" id="search-title">
           <input class="form-control me-2 colorFuchsia colorRadio" type="search" aria-label="Search" v-model="wordSearch">
           <button class="btn btn-outline-info" type="submit" v-on:click.prevent="search">Search</button>
