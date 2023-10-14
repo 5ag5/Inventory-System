@@ -1,16 +1,15 @@
 package inventarios.com.Sistema.Inventarios.Controllers;
 
-import inventarios.com.Sistema.Inventarios.Models.Audit;
-import inventarios.com.Sistema.Inventarios.Models.Product;
-import inventarios.com.Sistema.Inventarios.Models.UserInventory;
-import inventarios.com.Sistema.Inventarios.Models.slicePie;
+import inventarios.com.Sistema.Inventarios.Models.*;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
+import inventarios.com.Sistema.Inventarios.Services.GraphicsOptionsService;
 import inventarios.com.Sistema.Inventarios.Services.ProductService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
 import inventarios.com.Sistema.Inventarios.Utils.GraphsUtils;
 import org.apache.catalina.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.aspectj.weaver.loadtime.Options;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,16 +30,24 @@ public class GraphicsController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    GraphicsOptionsService graphicsOptionsService;
+
     @GetMapping("/testGraph")
     public String showHome() {
         return "index";
+    }
+
+    @GetMapping("api/graphs/optionsTests")
+    public List<OptionsGraphs> optiionsGraphsx(){
+        return graphicsOptionsService.findAllGraphOptions();
     }
 
     @GetMapping("api/graphs/optionsLineGraphs")
     public Map<String, String []> optionsGraphs(){
         Map<String, String []> options = new HashMap<>();
         options.put("Users", new String[] {"Date Registered", "status", "Last Registered Date", "User Type"});
-        options.put("Products", new String[] {"Action Audit","Audit Date","ID Table", "ID User","Table Names","Computer IPs"});
+        options.put("Products", new String[] {"Audit", "ID User", "Audit Date"});
         options.put("Audits", new String[] {"Status Product", "Quantity Product", "Price Purchase", "Price Sell", "Minimum Stock", "Maximum Stock", "Includes IVA"});
         return options;
     }
@@ -48,9 +55,9 @@ public class GraphicsController {
     @GetMapping("api/graphs/optionsPieChart")
     public  Map<String, String []> optionsPieChart(){
         Map<String, String []> options = new HashMap<>();
-        options.put("Users", new String[] {"User Type, status"});
-        options.put("Products", new String[] {"Audit, ID User, Audit Date"});
-        options.put("Audits", new String[] {"Status, Includes IVA, Category Product"});
+        options.put("Users", new String[] {"User Type", "status"});
+        options.put("Products", new String[] {"Audit", "ID User", "Audit Date"});
+        options.put("Audits", new String[] {"Status", "Includes IVA", "Category Product"});
 
         return options;
     }

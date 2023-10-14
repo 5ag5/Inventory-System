@@ -15,6 +15,7 @@ import javax.crypto.SecretKey;
 import java.net.InetAddress;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static javax.crypto.Cipher.*;
@@ -35,7 +36,8 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 								  ParameterRepository parameterRepository,
 								  ProductRepository productRepository,
 								  CategoryRepository categoryRepository,
-								  AuditRepository auditRepository){
+								  AuditRepository auditRepository,
+								  OptionsGraphsRepository optionsGraphsRepository){
  return (args) -> {
 
 	UserInventory user1 = new UserInventory("user11","Gonzalez", passwordEncoder.encode("user11"),"correo1@gmail.com", UserType.ADMIN);
@@ -56,6 +58,14 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 
 	 Product nikeSnickers = new Product("Snicker AIr Force snickers",550,150.00,400.00,
 			 15,1000,true);
+
+	 OptionsGraphs userLine = new OptionsGraphs("Users","Line Chart", Arrays.asList(new String[]{"Date Registered", "status", "Last Registered Date", "User Type"}),"api/graphs/UserGraphsCount/");
+	 OptionsGraphs productLine = new OptionsGraphs("Products","Line Chart", Arrays.asList(new String[] {"Action Audit","Audit Date","ID Table", "ID User","Table Names","Computer IPs"}),"api/graphs/ProductGraphsCount/");
+	 OptionsGraphs auditsLine = new OptionsGraphs("Audits","Line Chart", Arrays.asList(new String[] {"Status Product", "Quantity Product", "Price Purchase", "Price Sell", "Minimum Stock", "Maximum Stock", "Includes IVA"}),"api/graphs/auditGraphsCount/");
+
+	 OptionsGraphs userPie = new OptionsGraphs("Users","Pie Chart", Arrays.asList(new String[] {"User Type", "Status"}),"api/graphs/UserPieGraph/");
+	 OptionsGraphs productPie = new OptionsGraphs("Products","Pie Chart", Arrays.asList(new String[] {"Action", "ID User","Audit Date"}),"api/graphs/ProductPieChart/");
+	 OptionsGraphs auditsPie = new OptionsGraphs("Audits","Pie Chart", Arrays.asList(new String[] {"Status", "Includes IVA", "Category Product"}),"api/graphs/AuditPieChart/");
 
 	 productRepository.save(cavages);
 	 productRepository.save(fifa2023);
@@ -159,6 +169,14 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 auditRepository.save(audit4);
 	 auditRepository.save(audit5);
 	 auditRepository.save(audit6);
+
+	 optionsGraphsRepository.save(userLine);
+	 optionsGraphsRepository.save(productLine);
+	 optionsGraphsRepository.save(auditsLine);
+
+	 optionsGraphsRepository.save(userPie);
+	 optionsGraphsRepository.save(productPie);
+	 optionsGraphsRepository.save(auditsPie);
 
 
  };
