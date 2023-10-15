@@ -8,7 +8,7 @@ public class AuditDTO {
     private String direccionID;
     private LocalDate fechaAuditoria;
     private Long idTabla;
-    private Long idUsuario;
+    private String idUsuario;
     private tableNames tableNames;
 
     public AuditDTO(Audit audit) {
@@ -41,7 +41,7 @@ public class AuditDTO {
         return idTabla;
     }
 
-    public Long getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 

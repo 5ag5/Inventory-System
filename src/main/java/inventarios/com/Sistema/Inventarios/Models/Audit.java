@@ -17,7 +17,7 @@ public class Audit {
     private String direccionID;
     private LocalDate fechaAuditoria;
     private Long idTabla;
-    private Long idUsuario;
+    private String idUsuario;
     private tableNames tableNames;
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;  // Many to One
@@ -33,7 +33,7 @@ public class Audit {
 
     }
 
-    public Audit(ActionAudit actionAudit, String direccionID,LocalDate fechaAuditoria, Long idTabla, Long idUsuario, tableNames tableNames) {
+    public Audit(ActionAudit actionAudit, String direccionID,LocalDate fechaAuditoria, Long idTabla, String idUsuario, tableNames tableNames) {
         this.actionAudit=actionAudit;
         this.direccionID=direccionID;
         this.fechaAuditoria=fechaAuditoria;
@@ -82,11 +82,11 @@ public class Audit {
         this.idTabla = idTabla;
     }
 
-    public Long getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Long idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 

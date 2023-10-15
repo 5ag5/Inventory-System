@@ -14,7 +14,7 @@ const app = createApp({
             optionsEntitySelected: [],
             parameterOptions: [],
             graphOptionChosen: undefined,
-            testTest:[],
+            graphsInformation:[],
             hostAddress: 'http://localhost:8080/'
         }
     },
@@ -27,36 +27,22 @@ const app = createApp({
         async getData(){
         axios.get('http://localhost:8080/api/graphs/UserGraphsCount/User Type')
             .then(val =>{
-                this.valuesXline = val.data[0];
+                /*this.valuesXline = val.data[0];
                 this.valuesYline = val.data[1]
                 const arrayNums = this.stringToNumbers(this.valuesYline)
 
-                this.createLineChart(this.valuesXline, arrayNums)
-                //this.createPieChart()
-            
-            })
-
-            axios.get('http://localhost:8080/api/graphs/optionsPieChart').then(val =>{
-                this.mapOptionsPie = new Map(Object.entries(val.data));
-                //console.log( this.mapOptionsPie);
-            })
-
-            axios.get('http://localhost:8080/api/graphs/optionsLineGraphs').then(val =>{
-                this.mapOptionsLine = new Map(Object.entries(val.data));
-                //console.log(this.mapOptionsLine);
+                this.createLineChart(this.valuesXline, arrayNums, val.titleGraph)*/
             })
 
            axios.get('http://localhost:8080/api/graphs/UserPieGraph/Status').then( val =>{
                 this.pieChartTest = val.data
-                //console.log(val.data)
-                //console.log(this.pieChartTest)
-                
-                this.createPieChart(this.pieChartTest,"Pie Chart test");
+
+                this.createPieChart(this.pieChartTest, val.titleGraph);
             })
 
             axios.get('http://localhost:8080/api/graphs/optionsTests').then(val =>{
                 //console.log(val.data)
-                this.testTest = val.data
+                this.graphsInformation = val.data
                 console.log(val.data)
 
             })
@@ -67,99 +53,47 @@ const app = createApp({
             switch(graph){
                 case "Pie Chart":
                 this.choiceGraph = "Pie Chart";  
-                console.log(this.choiceGraph)
 
                 break;
                 case "Line Chart":
                 this.choiceGraph = "Line Chart";  
-                console.log(this.choiceGraph)
                 break;
             }
         },
 
         typeOfEntitySelected(option){
-            console.log(option)
-            console.log(this.choiceGraph)
             this.entitySelected = option
 
-            this.testTest.forEach( val => {
+            this.graphsInformation.forEach( val => {
                 if(val.entityType === option && this.choiceGraph === val.typeOfGraph ){
-                    //console.log("funcionaaaa muy bien!" + " " + val.entityType + " " + val.typeOfGraph)
                     this.parameterOptions = val.optionsEntity
-
                 }
             })
-
-            console.log(this.parameterOptions)
-
-            /*switch(option){
-                case "Users":
-                    this.entitySelected = "Users";
-                    console.log(this.entitySelected)
-
-                    if(this.choiceGraph === "Pie Chart"){
-                        this.optionsEntitySelected = this.mapOptionsPie.get('Users');
-                        this.parameterOptionGenerator(this.entitySelected, this.choiceGraph)
-                        //console.log(this.optionsEntitySelected)
-                        this.generateGraphUsers(this.parameterOptions)
-
-                    }else if (this.choiceGraph === "Line Chart") {
-                        this.optionsEntitySelected = this.mapOptionsLine.get('Users');
-                        this.parameterOptionGenerator(this.entitySelected, this.choiceGraph)
-                        //console.log(this.optionsEntitySelected)
-                    } 
-                break;
-                case "Products":
-                    this.entitySelected = "Products";  
-                    if(this.choiceGraph === "Pie Chart"){
-                        this.optionsEntitySelected = this.mapOptionsPie.get('Products');
-                        this.parameterOptionGenerator(this.entitySelected, this.choiceGraph)
-                        //console.log(this.optionsEntitySelected)
-                    }else if (this.choiceGraph === "Line Chart") {
-                        this.optionsEntitySelected = this.mapOptionsLine.get('Products');
-                        this.parameterOptionGenerator(this.entitySelected, this.choiceGraph)
-                        //console.log(this.optionsEntitySelected)
-                    } 
-                break;
-                case "Audits":
-                    this.entitySelected = "Audits";  
-                    if(this.choiceGraph === "Pie Chart"){
-                        this.optionsEntitySelected = this.mapOptionsPie.get('Audits');
-                        this.parameterOptionGenerator(this.entitySelected, this.choiceGraph)
-                        //console.log(this.optionsEntitySelected)
-                    }else if (this.choiceGraph === "Line Chart") {
-                        this.optionsEntitySelected = this.mapOptionsLine.get('Audits');
-                        this.parameterOptionGenerator(this.entitySelected, this.choiceGraph)
-                        //console.log(this.optionsEntitySelected)
-                    } 
-                break;
-            }*/
         },
-
-        /*parameterOptionGenerator(entity, graphType){
-            this.testTest.forEach(val =>{
-                if(val.entityType === entity && val.typeOfGraph === graphType){
-                    //console.log(val.optionsEntity)
-                    //this.parameterOptions = val.optionsEntity
-                }
-            })
-            //console.log(this.parameterOptions)
-        },*/
         
         generateGraph(parameter){
-            console.log(parameter)
             let apiUrl = ""
+            let title = ""
 
-            this.testTest.forEach(val => {
+            this.graphsInformation.forEach(val => {
                 if(val.entityType === this.entitySelected && val.typeOfGraph === this.choiceGraph){
                     apiUrl = val.urlAPI
+                    title = val.titleGraph
                 }
             })
-            console.log(apiUrl+ parameter)
+
             console.log(this.hostAddress + apiUrl+ parameter)
            axios.get(this.hostAddress + apiUrl+ parameter).then( val => {
-                //console.log(val.data)
-                this.createPieChart(val.data, "This is a Users Pie Chart")
+                console.log(val.data)
+                if(this.choiceGraph === "Pie Chart" ){
+                    this.createPieChart(val.data, title)
+                }else if(this.choiceGraph === "Line Chart" ){
+                    this.valuesXline = val.data[0];
+                    this.valuesYline = val.data[1]
+                    const arrayNums = this.stringToNumbers(this.valuesYline)
+
+                    this.createLineChart(this.valuesXline, arrayNums, title)
+                }
             })
             
         },
@@ -172,13 +106,13 @@ const app = createApp({
             return arrNum
         },
 
-        createLineChart(category, dataSeries){
+        createLineChart(category, dataSeries, title){
                 Highcharts.chart('GraphInfo', {
                     chart: {
                         type: 'line'
                     },
                     title: {
-                        text: 'Fruit Consumption'
+                        text: title
                     },
                     xAxis: {
                         categories: category
@@ -197,7 +131,7 @@ const app = createApp({
         },
 
         createPieChart(dataObjects, title){
-        Highcharts.chart('DIVdownloadParameter', { 
+        Highcharts.chart('GraphInfo', { 
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,

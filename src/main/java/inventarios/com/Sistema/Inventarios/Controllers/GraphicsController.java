@@ -68,37 +68,43 @@ public class GraphicsController {
         List<UserInventory> namesCategories = userInventoryService.findAllUsers();
         Set<String> namesArgument = new HashSet<>();
         List<String> elementsArguments = new ArrayList<>();
+        boolean typeOfArray = true;
 
         switch (nameArgument) {
             case "Date Registered":
                 for (UserInventory userTemp : namesCategories) {
                     namesArgument.add(String.valueOf(userTemp.getDateRegistered()));
                     elementsArguments.add(String.valueOf(userTemp.getDateRegistered()));
+                    typeOfArray = false;
                 }
                 break;
-            case "status":
+            case "Status":
                 for (UserInventory userTemp : namesCategories) {
                     namesArgument.add(String.valueOf(userTemp.isStatus()));
                     elementsArguments.add(String.valueOf(userTemp.isStatus()));
+                    typeOfArray = false;
                 }
                 break;
             case "Last Registered Date":
                 for (UserInventory userTemp : namesCategories) {
                     namesArgument.add(String.valueOf(userTemp.getLastRegisteredPassword()));
                     elementsArguments.add(String.valueOf(userTemp.getLastRegisteredPassword()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "User Type":
                 for (UserInventory userTemp : namesCategories) {
                     namesArgument.add(String.valueOf(userTemp.getUserType()));
                     elementsArguments.add(String.valueOf(userTemp.getUserType()));
+                    typeOfArray = false;
                 }
                 break;
         }
 
         logger.info("User Graphs Created");
 
-        return GraphsUtils.get2DGraph(namesArgument, elementsArguments, nameArgument);
+        return GraphsUtils.get2DGraph(namesArgument, elementsArguments, typeOfArray);
     }
 
     @GetMapping("api/graphs/auditGraphsCount/{nameArgument}")
@@ -107,43 +113,54 @@ public class GraphicsController {
         List<Audit> namesCategories = auditService.findAllAudit();
         Set<String> namesArgument = new HashSet<>();
         List<String> elementsArguments = new ArrayList<>();
-        int sizeArray = 0;
+        boolean typeOfArray = true;
 
         switch (nameArgument) {
             case "Action Audit":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getActionAudit()));
                     elementsArguments.add(String.valueOf(auditTemp.getActionAudit()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "Audit Date":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getFechaAuditoria()));
                     elementsArguments.add(String.valueOf(auditTemp.getFechaAuditoria()));
+                    typeOfArray = false;
+
                 }
                 break;
-            case "ID Table":
+                case "ID Table":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getIdTabla()));
                     elementsArguments.add(String.valueOf(auditTemp.getIdTabla()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "ID User":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getIdUsuario()));
                     elementsArguments.add(String.valueOf(auditTemp.getIdUsuario()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "Table Names":
                 for (Audit auditTemp : namesCategories) {
                     namesArgument.add(String.valueOf(auditTemp.getNombreTabla()));
                     elementsArguments.add(String.valueOf(auditTemp.getNombreTabla()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "Computer IPs":
                 for(Audit audit: namesCategories){
                     namesArgument.add(String.valueOf(audit.getDireccionID()));
                     elementsArguments.add(String.valueOf(audit.getDireccionID()));
+                    typeOfArray = false;
                 }
                 break;
 
@@ -151,7 +168,7 @@ public class GraphicsController {
 
         logger.info("Audit Graphs Created");
 
-        return GraphsUtils.get2DGraph(namesArgument, elementsArguments, nameArgument);
+        return GraphsUtils.get2DGraph(namesArgument, elementsArguments, typeOfArray);
     }
 
     @GetMapping("api/graphs/ProductGraphsCount/{nameArgument}")
@@ -160,18 +177,20 @@ public class GraphicsController {
         List<Product> namesCategories = productService.findAllProducts();
         Set<String> namesArgument = new HashSet<>();
         List<String> elementsArguments = new ArrayList<>();
-        int sizeArray = 0;
+        boolean typeOfArray = true;
 
         switch (nameArgument) {
             case "Status Product":
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.isStatusProduct()));
                     elementsArguments.add(String.valueOf(productTemp.isStatusProduct()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "Quantity Product":
                 for (Product productTemp : namesCategories) {
-                    namesArgument.add(String.valueOf(productTemp.getCantidadProduct()));
+                    namesArgument.add(String.valueOf(productTemp.getDescriptionProduct()));
                     elementsArguments.add(String.valueOf(productTemp.getCantidadProduct()));
                 }
                 break;
@@ -179,18 +198,24 @@ public class GraphicsController {
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.getPrecioCompra()));
                     elementsArguments.add(String.valueOf(productTemp.getPrecioCompra()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "Price Sell":
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.getPrecioVenta()));
                     elementsArguments.add(String.valueOf(productTemp.getPrecioVenta()));
+                    typeOfArray = false;
+
                 }
                 break;
             case "Minimum Stock":
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.getMinimumStock()));
                     elementsArguments.add(String.valueOf(productTemp.getMinimumStock()));
+                    typeOfArray = false;
+
                 }
                 break;
 
@@ -198,6 +223,8 @@ public class GraphicsController {
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.getMaximumStock()));
                     elementsArguments.add(String.valueOf(productTemp.getMaximumStock()));
+                    typeOfArray = false;
+
                 }
                 break;
 
@@ -205,13 +232,15 @@ public class GraphicsController {
                 for (Product productTemp : namesCategories) {
                     namesArgument.add(String.valueOf(productTemp.isIncludesIVA()));
                     elementsArguments.add(String.valueOf(productTemp.isIncludesIVA()));
+                    typeOfArray = false;
+
                 }
                 break;
         }
 
         logger.info("Audit Products Created");
 
-        return GraphsUtils.get2DGraph(namesArgument, elementsArguments, nameArgument);
+        return GraphsUtils.get2DGraph(namesArgument, elementsArguments, typeOfArray);
 
     }
 

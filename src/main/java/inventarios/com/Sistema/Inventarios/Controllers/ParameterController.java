@@ -217,7 +217,7 @@ public class ParameterController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.CATEGORY
         );
 
@@ -242,7 +242,7 @@ public class ParameterController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.CATEGORY
         );
 
@@ -266,7 +266,7 @@ public class ParameterController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.CATEGORY
         );
 

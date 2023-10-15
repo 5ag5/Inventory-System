@@ -6,7 +6,11 @@ import java.util.*;
 
 public final class GraphsUtils {
 
-    public static String [][] get2DGraph(Set<String>namesArgument,  List<String> elementsArguments, String nameArgument){
+    public static String [][] get2DGraph(Set<String>namesArgument,  List<String> elementsArguments, boolean typeOfArray){
+        if(typeOfArray == true){
+            return get2DGraphNoCounting(namesArgument,  elementsArguments);
+        }
+
         Map<String, Integer> seen = new HashMap<>();
         List<String> countValues = new ArrayList<>();
 
@@ -18,6 +22,10 @@ public final class GraphsUtils {
             countValues.add(String.valueOf(val));
         }
         return new String[][]{namesArgument.toArray(new String[0]), countValues.toArray(new String[0])};
+    }
+
+    public static String[][] get2DGraphNoCounting(Set<String>namesArgument,  List<String> elementsArguments){
+        return new String[][]{namesArgument.toArray(new String[0]),elementsArguments.toArray(new String[0])};
     }
 
     public static List<slicePie>getPieChart(List<String> elementsArguments, Set<String> nameParameters){

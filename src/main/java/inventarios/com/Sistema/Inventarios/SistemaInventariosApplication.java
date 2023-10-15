@@ -51,22 +51,23 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 Category videoGames = new Category("VIDEO GAMES",true);
 
 	 Product cavages = new Product("Cavage is a vegetable that we sell", 200, 12.20, 18.99,
-	 20, 1000, true);
+	 20, 10000, false);
 
-	 Product fifa2023 = new Product("football game created by EA Sports",45,10.00,40.00,
-			 3,1000,true);
+	 Product fifa2023 = new Product("football game created by EA Sports",45,12.20,40.00,
+			 20,1000,true);
 
-	 Product nikeSnickers = new Product("Snicker AIr Force snickers",550,150.00,400.00,
+	 Product nikeSnickers = new Product("Snicker AIr Force snickers",550,150.00,40.00,
 			 15,1000,true);
 
-	 OptionsGraphs userLine = new OptionsGraphs("Users","Line Chart", Arrays.asList(new String[]{"Date Registered", "status", "Last Registered Date", "User Type"}),"api/graphs/UserGraphsCount/");
-	 OptionsGraphs productLine = new OptionsGraphs("Products","Line Chart", Arrays.asList(new String[] {"Action Audit","Audit Date","ID Table", "ID User","Table Names","Computer IPs"}),"api/graphs/ProductGraphsCount/");
-	 OptionsGraphs auditsLine = new OptionsGraphs("Audits","Line Chart", Arrays.asList(new String[] {"Status Product", "Quantity Product", "Price Purchase", "Price Sell", "Minimum Stock", "Maximum Stock", "Includes IVA"}),"api/graphs/auditGraphsCount/");
+	 OptionsGraphs userLine = new OptionsGraphs("Users","Line Chart", Arrays.asList(new String[]{"Date Registered", "Status", "Last Registered Date", "User Type"}),"api/graphs/UserGraphsCount/","User Line Chart");
+	 OptionsGraphs productLine = new OptionsGraphs("Products","Line Chart", Arrays.asList(new String[] {"Status Product", "Quantity Product", "Price Purchase", "Price Sell", "Minimum Stock", "Maximum Stock", "Includes IVA"}),"api/graphs/ProductGraphsCount/","Products Line Chart");
+	 OptionsGraphs auditsLine = new OptionsGraphs("Audits","Line Chart", Arrays.asList(new String[] {"Action Audit","Audit Date","ID Table", "ID User","Table Names","Computer IPs"}),"api/graphs/auditGraphsCount/","Audits Line Chart");
 
-	 OptionsGraphs userPie = new OptionsGraphs("Users","Pie Chart", Arrays.asList(new String[] {"User Type", "Status"}),"api/graphs/UserPieGraph/");
-	 OptionsGraphs productPie = new OptionsGraphs("Products","Pie Chart", Arrays.asList(new String[] {"Action", "ID User","Audit Date"}),"api/graphs/ProductPieChart/");
-	 OptionsGraphs auditsPie = new OptionsGraphs("Audits","Pie Chart", Arrays.asList(new String[] {"Status", "Includes IVA", "Category Product"}),"api/graphs/AuditPieChart/");
+	 OptionsGraphs userPie = new OptionsGraphs("Users","Pie Chart", Arrays.asList(new String[] {"User Type", "Status"}),"api/graphs/UserPieGraph/","Users Pie Chart");
+	 OptionsGraphs productPie = new OptionsGraphs("Products","Pie Chart", Arrays.asList(new String[] {"Status", "Includes IVA", "Category Product"}),"api/graphs/ProductPieChart/", "Products Pie Chart");
+	 OptionsGraphs auditsPie = new OptionsGraphs("Audits","Pie Chart", Arrays.asList(new String[] {"Action", "ID User", "Audit Date"}),"api/graphs/AuditPieChart/","Audits Pie Chart");
 
+	 nikeSnickers.setStatusProduct(false);
 	 productRepository.save(cavages);
 	 productRepository.save(fifa2023);
 	 productRepository.save(nikeSnickers);
@@ -99,16 +100,16 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 2L,
+			 user2.getLogin(),
 			 tableNames.USERINVENTORY);
 	cavages.addAudit(audit1);
 
 	 Audit audit2 = new Audit(
 			 ActionAudit.INSERT,
 			 textEncrypted,
-			 LocalDate.now(),
+			 LocalDate.now().minusDays(3),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 2L,
+			 user2.getLogin(),
 			 tableNames.USERINVENTORY);
 	 cavages.addAudit(audit2);
 
@@ -118,7 +119,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 2L,
+			 user2.getLogin(),
 			 tableNames.USERINVENTORY);
 	 nikeSnickers.addAudit(audit3);
 
@@ -127,15 +128,15 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 3L,
+			 user3.getLogin(),
 			 tableNames.USERINVENTORY);
 
 	 Audit audit5 = new Audit(
 			 ActionAudit.LOGIN,
 			 textEncrypted,
-			 LocalDate.now(),
+			 LocalDate.now().plusDays(2),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 3L,
+			 user3.getLogin(),
 			 tableNames.USERINVENTORY);
 
 	 Audit audit6 = new Audit(
@@ -143,19 +144,34 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 			 textEncrypted,
 			 LocalDate.now(),
 			 tableNames.USERINVENTORY.getIdTable(),
-			 3L,
+			 user4.getLogin(),
 			 tableNames.USERINVENTORY);
 
+	 Audit audit7 = new Audit(
+			 ActionAudit.UPDATE,
+			 textEncrypted,
+			 LocalDate.now().plusDays(2),
+			 tableNames.PRODUCT.getIdTable(),
+			 user1.getLogin(),
+			 tableNames.PRODUCT);
+
+	 fifa2023.addAudit(audit7);
 	 productRepository.save(cavages);
 	 productRepository.save(fifa2023);
 	 productRepository.save(nikeSnickers);
 
-	 user2.addAudit(audit1);
 	 user2.addAudit(audit2);
+	 user2.addAudit(audit1);
 	 user2.addAudit(audit3);
 	 user3.addAudit(audit4);
 	 user3.addAudit(audit5);
 	 user3.addAudit(audit6);
+
+	 user1.setDateRegistered(LocalDate.now().minusDays(3));
+	 user4.setDateRegistered(LocalDate.now().plusDays(2));
+
+	 user2.setLastRegisteredPassword(LocalDate.now().minusDays(3));
+	 user3.setLastRegisteredPassword(LocalDate.now().plusDays(2));
 
 	 userInventoryRepository.save(user1);
 	 userInventoryRepository.save(user2);
@@ -169,6 +185,7 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 auditRepository.save(audit4);
 	 auditRepository.save(audit5);
 	 auditRepository.save(audit6);
+	 auditRepository.save(audit7);
 
 	 optionsGraphsRepository.save(userLine);
 	 optionsGraphsRepository.save(productLine);

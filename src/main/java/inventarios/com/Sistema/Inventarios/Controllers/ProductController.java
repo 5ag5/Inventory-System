@@ -196,7 +196,7 @@ public class ProductController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.PRODUCT.getIdTable(),
-                user.getId(),
+                user.getLogin(),
                 tableNames.PRODUCT
         );
 
@@ -221,7 +221,7 @@ public class ProductController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.PRODUCT.getIdTable(),
-                user.getId(),
+                user.getLogin(),
                 tableNames.PRODUCT
         );
 
@@ -246,7 +246,7 @@ public class ProductController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.PRODUCT.getIdTable(),
-                user.getId(),
+                user.getLogin(),
                 tableNames.PRODUCT
         );
 

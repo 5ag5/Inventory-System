@@ -95,7 +95,7 @@ UserInventoryService userInventoryService;
                 String.valueOf(InetAddress.getLocalHost()),
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.CATEGORY
         );
 
@@ -113,7 +113,7 @@ UserInventoryService userInventoryService;
                 String.valueOf(InetAddress.getLocalHost()),
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.CATEGORY
         );
 
@@ -129,7 +129,7 @@ UserInventoryService userInventoryService;
                 String.valueOf(InetAddress.getLocalHost()),
                 LocalDate.now(),
                 tableNames.CATEGORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.CATEGORY
         );
 

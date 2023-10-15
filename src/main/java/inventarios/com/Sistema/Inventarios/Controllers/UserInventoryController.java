@@ -77,7 +77,7 @@ public class UserInventoryController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.LOGIN.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.LOGIN);
 
         userTemp.addAudit(auditLogin);
@@ -280,7 +280,7 @@ public class UserInventoryController {
                 String.valueOf(InetAddress.getLocalHost()),
                 LocalDate.now(),
                 tableNames.USERINVENTORY.getIdTable(),
-                userTemp.getId(),
+                userTemp.getLogin(),
                 tableNames.USERINVENTORY);
 
         userTemp.addAudit(auditTemp);
@@ -303,7 +303,7 @@ public class UserInventoryController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.USERINVENTORY.getIdTable(),
-                0L,
+                userTemp.getLogin(),
                 tableNames.USERINVENTORY);
 
         userTemp.addAudit(auditTemp);
@@ -326,7 +326,7 @@ public class UserInventoryController {
                 textEncrypted,
                 LocalDate.now(),
                 tableNames.USERINVENTORY.getIdTable(),
-                0L,
+                userTemp.getLogin(),
                 tableNames.USERINVENTORY);
 
         userTemp.addAudit(auditTemp);
