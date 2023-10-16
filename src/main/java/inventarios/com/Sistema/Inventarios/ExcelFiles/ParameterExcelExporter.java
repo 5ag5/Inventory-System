@@ -37,7 +37,8 @@ public class ParameterExcelExporter {
         createCell(row, 0, "User ID", style);
         createCell(row, 1, "Parameter Description", style);
         createCell(row, 2, "Parameter Status", style);
-        createCell(row, 3, "Value Parameter", style);
+        createCell(row, 3, "Name Parameter", style);
+        createCell(row, 4, "Value Parameter", style);
     }
 
     private void createCell(Row row, int columnCount, Object value, CellStyle style) {

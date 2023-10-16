@@ -44,14 +44,14 @@ AuditService auditService;
 @Autowired
 UserInventoryService userInventoryService;
 
-    @GetMapping("/category/export/excel")
+    @GetMapping("api/category/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=category_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Category> listCategory = categoryService.findAllCategories();
@@ -63,12 +63,12 @@ UserInventoryService userInventoryService;
         excelExporter.export(response);
     }
 
-    @PostMapping(path="/category/categoryPDF")
+    @PostMapping(path="api/category/categoryPDF")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=transactions_.pdf";
+        String headerValue = "attachment; filename=category_.pdf";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);

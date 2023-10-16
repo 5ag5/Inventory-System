@@ -55,14 +55,14 @@ public class ProductController {
     @Autowired
     UserInventoryService userInventoryService;
 
-    @GetMapping("/product/export/excel")
+    @GetMapping("api/product/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=product_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=products_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Product> listProduct = productService.findAllProducts();
@@ -74,12 +74,12 @@ public class ProductController {
         excelExporter.export(response);
     }
 
-    @PostMapping(path="/product/productPDF")
+    @PostMapping(path="api/product/productPDF")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=transactions_.pdf";
+        String headerValue = "attachment; filename=products_.pdf";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);

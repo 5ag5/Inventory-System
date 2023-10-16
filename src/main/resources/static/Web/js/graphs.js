@@ -15,7 +15,12 @@ const app = createApp({
             parameterOptions: [],
             graphOptionChosen: undefined,
             graphsInformation:[],
-            hostAddress: 'http://localhost:8080/'
+            hostAddress: 'http://localhost:8080/',
+            reportsInformation:[],
+            entitiesReport:undefined,
+            reportsOptions:undefined,
+            reportChosen:undefined,
+            entityReportChosen:undefined
         }
     },
 
@@ -25,27 +30,28 @@ const app = createApp({
 
     methods:{
         async getData(){
-        axios.get('http://localhost:8080/api/graphs/UserGraphsCount/User Type')
-            .then(val =>{
-                /*this.valuesXline = val.data[0];
-                this.valuesYline = val.data[1]
-                const arrayNums = this.stringToNumbers(this.valuesYline)
-
-                this.createLineChart(this.valuesXline, arrayNums, val.titleGraph)*/
-            })
-
-           axios.get('http://localhost:8080/api/graphs/UserPieGraph/Status').then( val =>{
-                this.pieChartTest = val.data
-
-                this.createPieChart(this.pieChartTest, val.titleGraph);
-            })
-
-            axios.get('http://localhost:8080/api/graphs/optionsTests').then(val =>{
+            axios.get('http://localhost:8080/api/graphs/graphsInformation').then(val =>{
                 //console.log(val.data)
                 this.graphsInformation = val.data
                 console.log(val.data)
+                this.choiceGraph = "Pie Chart"; 
+                this.entitySelected = "Users";
+                let parameter = "User Type";
 
+                this.generateGraph(parameter)
             })
+
+            axios.get('http://localhost:8080/api/reports/getReportsInformation').then( val =>{
+                this.reportsInformation = val.data;
+                this.entitiesReport = new Set() 
+                
+                this.reportsInformation.forEach( val =>{
+                    this.entitiesReport.add(val.entityType)
+                })
+                console.log(this.reportsInformation)
+            })
+
+ //====================================GRAPHICS===========================================       
 
         },
 
@@ -214,7 +220,61 @@ const app = createApp({
             }]
         });
 
+        },
+
+ //====================================REPORTS===========================================       
+    captureEntityReport(entity){
+        this.entityReportChosen = entity
+        this.reportsOptions = new Set()
+        this.reportsInformation.forEach( val =>{
+            if(val.entityType === entity){
+                this.reportsOptions.add(val.reportType)
+            }
+        })
+    },
+
+    captureTypeReport(report){
+        let urlApi = ""
+        let fileName = ""
+        this.reportsInformation.forEach( val =>{
+            if(val.entityType === this.entityReportChosen && val.reportType === report){
+                urlApi = val.urlType
+                fileName =val.fileName
+            }
+        })  
+        console.log(urlApi)
+        console.log(this.hostAddress + urlApi)
+        console.log(fileName)
+
+        if(report === "Excel"){
+        axios.get(this.hostAddress + urlApi,{responseType:'blob'}).then(val =>{
+            const url = window.URL.createObjectURL(new Blob([val.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.setAttribute('download',fileName);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        })
+        .catch(error => {
+            console.error("Error while fetching the PDF:", error);
+        });
+        //console.log('SOY UN EXCEL QUE FUNCIONA')
+        }else if(report === "PDF"){
+            axios.post(this.hostAddress + urlApi,null,{responseType:'blob'}).then(val =>{
+            const url = window.URL.createObjectURL(new Blob([val.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.setAttribute('download',fileName);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            })
+            .catch(error => {
+                console.error("Error while fetching the PDF:", error);
+            });
         }
+    }
     }
 })
 

@@ -13,10 +13,11 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.net.InetAddress;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Date;
 
 import static javax.crypto.Cipher.*;
 
@@ -37,7 +38,8 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 								  ProductRepository productRepository,
 								  CategoryRepository categoryRepository,
 								  AuditRepository auditRepository,
-								  OptionsGraphsRepository optionsGraphsRepository){
+								  OptionsGraphsRepository optionsGraphsRepository,
+								  OptionsReportsRepository optionsReportsRepository){
  return (args) -> {
 
 	UserInventory user1 = new UserInventory("user11","Gonzalez", passwordEncoder.encode("user11"),"correo1@gmail.com", UserType.ADMIN);
@@ -66,6 +68,22 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 OptionsGraphs userPie = new OptionsGraphs("Users","Pie Chart", Arrays.asList(new String[] {"User Type", "Status"}),"api/graphs/UserPieGraph/","Users Pie Chart");
 	 OptionsGraphs productPie = new OptionsGraphs("Products","Pie Chart", Arrays.asList(new String[] {"Status", "Includes IVA", "Category Product"}),"api/graphs/ProductPieChart/", "Products Pie Chart");
 	 OptionsGraphs auditsPie = new OptionsGraphs("Audits","Pie Chart", Arrays.asList(new String[] {"Action", "ID User", "Audit Date"}),"api/graphs/AuditPieChart/","Audits Pie Chart");
+
+	 DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+	 String currentDateTime = dateFormatter.format(new Date());
+
+	 OptionsReports auditExcel = new OptionsReports("Audits","Excel","api/audit/export/excel", "audit_" + currentDateTime + ".xlsx");
+	 OptionsReports categoryExcel = new OptionsReports("Categories","Excel","api/category/export/excel", "category_" + currentDateTime + ".xlsx");
+	 OptionsReports parameterExcel = new OptionsReports("Parameters","Excel","api/parameter/export/excel", "parameters_" + currentDateTime + ".xlsx");
+	 OptionsReports productExcel = new OptionsReports("Products","Excel","api/product/export/excel", "products_" + currentDateTime + ".xlsx");
+	 OptionsReports userExcel = new OptionsReports("Users","Excel","api/users/export/excel", "users_" + currentDateTime + "_.xlsx");
+
+	 OptionsReports auditPdf  = new OptionsReports("Audits","PDF","api/audit/auditPDF", "audits_.pdf");
+	 OptionsReports categoryPdf  = new OptionsReports("Categories","PDF","api/category/categoryPDF", "category_.pdf");
+	 OptionsReports parameterPdf = new OptionsReports("Parameters","PDF","api/parameter/parameterPDF", "parameters_.pdf");
+	 OptionsReports productPdf  = new OptionsReports("Products","PDF","api/product/productPDF", "products_.pdf");
+	 OptionsReports userPdf  = new OptionsReports("Users","PDF","api/user/usersPDF", "users_.pdf");
+
 
 	 nikeSnickers.setStatusProduct(false);
 	 productRepository.save(cavages);
@@ -195,6 +213,17 @@ public CommandLineRunner initData(UserInventoryRepository userInventoryRepositor
 	 optionsGraphsRepository.save(productPie);
 	 optionsGraphsRepository.save(auditsPie);
 
+	 optionsReportsRepository.save(auditExcel);
+	 optionsReportsRepository.save(categoryExcel);
+	 optionsReportsRepository.save(parameterExcel);
+	 optionsReportsRepository.save(productExcel);
+	 optionsReportsRepository.save(userExcel);
+
+	 optionsReportsRepository.save(auditPdf);
+	 optionsReportsRepository.save(categoryPdf);
+	 optionsReportsRepository.save(parameterPdf);
+	 optionsReportsRepository.save(productPdf);
+	 optionsReportsRepository.save(userPdf);
 
  };
 }

@@ -134,14 +134,14 @@ public class ParameterController {
         return new ResponseEntity<>("Parameter Erased", HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/parameter/export/excel")
+    @GetMapping("api/parameter/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=parameters_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<Parameter> listParameter = parameterService.findAllParameters();
@@ -153,12 +153,12 @@ public class ParameterController {
         excelExporter.export(response);
     }
 
-    @PostMapping(path="/parameter/parameterPDF")
+    @PostMapping(path="api/parameter/parameterPDF")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=transactions_.pdf";
+        String headerValue = "attachment; filename=parameters_.pdf";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);

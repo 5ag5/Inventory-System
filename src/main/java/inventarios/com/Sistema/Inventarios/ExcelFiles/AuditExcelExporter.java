@@ -36,7 +36,6 @@ public class AuditExcelExporter {
         style.setFont(font);
 
         createCell(row, 0, "User ID", style);
-        createCell(row, 1, "Action", style);
         createCell(row, 2, "IP Address", style);
         createCell(row, 3, "Audit Date", style);
         createCell(row, 4, "Table ID", style);

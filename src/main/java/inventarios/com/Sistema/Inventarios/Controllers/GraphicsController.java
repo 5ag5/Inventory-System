@@ -38,12 +38,12 @@ public class GraphicsController {
         return "index";
     }
 
-    @GetMapping("api/graphs/optionsTests")
+    @GetMapping("api/graphs/graphsInformation")
     public List<OptionsGraphs> optiionsGraphsx(){
         return graphicsOptionsService.findAllGraphOptions();
     }
 
-    @GetMapping("api/graphs/optionsLineGraphs")
+   /* @GetMapping("api/graphs/optionsLineGraphs")
     public Map<String, String []> optionsGraphs(){
         Map<String, String []> options = new HashMap<>();
         options.put("Users", new String[] {"Date Registered", "status", "Last Registered Date", "User Type"});
@@ -60,7 +60,7 @@ public class GraphicsController {
         options.put("Audits", new String[] {"Status", "Includes IVA", "Category Product"});
 
         return options;
-    }
+    }*/
 
     @GetMapping("api/graphs/UserGraphsCount/{nameArgument}")
     public String[][] userGraph(@PathVariable String nameArgument) {

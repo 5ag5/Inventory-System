@@ -3,9 +3,11 @@ package inventarios.com.Sistema.Inventarios.Controllers;
 import inventarios.com.Sistema.Inventarios.DTOs.UserDTO;
 import inventarios.com.Sistema.Inventarios.ExcelFiles.AuditExcelExporter;
 import inventarios.com.Sistema.Inventarios.Models.Audit;
+import inventarios.com.Sistema.Inventarios.Models.OptionsReports;
 import inventarios.com.Sistema.Inventarios.Models.UserInventory;
 import inventarios.com.Sistema.Inventarios.PDFFiles.AuditPDFExporter;
 import inventarios.com.Sistema.Inventarios.Services.AuditService;
+import inventarios.com.Sistema.Inventarios.Services.OptionsReportService;
 import inventarios.com.Sistema.Inventarios.Services.UserInventoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +37,9 @@ public class AuditController {
     @Autowired
     UserInventoryService userInventoryService;
 
+    @Autowired
+    OptionsReportService optionsReportService;
+
     @GetMapping("/audit/allAudits")
     public List<Audit> getAllAudits(){
         return auditService.findAllAudit();
@@ -45,15 +50,18 @@ public class AuditController {
         return userInventoryService.findUserDTO(userLogin);
     }
 
-    @GetMapping("/audit/export/excel")
+    @GetMapping("api/audit/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
         String currentDateTime = dateFormatter.format(new Date());
+
 
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=audit_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
+
 
         List<Audit> listAudit = auditService.findAllAudit();
 
@@ -64,13 +72,12 @@ public class AuditController {
         excelExporter.export(response);
     }
 
-    @PostMapping(path="/audit/auditPDF")
-    public void exportToPDF(HttpServletResponse response,
-                            @RequestParam String userLogin) throws IOException {
+    @PostMapping(path="api/audit/auditPDF")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=transactions_.pdf";
+        String headerValue = "attachment; filename=audits_.pdf";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);
@@ -78,9 +85,7 @@ public class AuditController {
 
         response.setHeader(headerKey,headerValue);
 
-        UserInventory userInventory = userInventoryService.findUser(userLogin);
-
-        Set<Audit> userAudits = userInventory.getAuditories();
+        List<Audit> userAudits = auditService.findAllAudit();
        //Set<Transaction> setTransactions = transactionService.findAccountsByAccountAndDateBetween(account,dateTime1,dateTime2);
         //Set<Transaction> setTransactions = transactionRepository.findAccountsByAccountAndDateBetween(account,dateTime1,dateTime2);
 

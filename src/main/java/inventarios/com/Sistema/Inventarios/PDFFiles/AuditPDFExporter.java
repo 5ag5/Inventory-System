@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 public class AuditPDFExporter {
-    private Set<Audit> audits;
+    private List<Audit> audits;
 
-    public AuditPDFExporter(Set<Audit> setAudits){
+    public AuditPDFExporter(List<Audit> setAudits){
         this.audits = setAudits;
     }
 

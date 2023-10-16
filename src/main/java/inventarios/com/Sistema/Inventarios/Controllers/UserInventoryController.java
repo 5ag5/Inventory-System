@@ -224,14 +224,16 @@ public class UserInventoryController {
         return  new ResponseEntity<>("The account is active." +userInventory.getNumberOfLoginTries(), HttpStatus.FORBIDDEN);
     }
 
-    @GetMapping("/users/export/excel")
+    @GetMapping("api/users/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
         String currentDateTime = dateFormatter.format(new Date());
+
 
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
+        //String headerValue = "attachment; filename=users_.xlsx";
         response.setHeader(headerKey, headerValue);
 
         List<UserInventory> listUsers = userInventoryService.findAllUsers();
@@ -242,12 +244,12 @@ public class UserInventoryController {
         excelExporter.export(response);
     }
 
-    @PostMapping(path="/user/usersPDF")
+    @PostMapping(path="api/user/usersPDF")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=transactions_.pdf";
+        String headerValue = "attachment; filename=users_.pdf";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         /*LocalDateTime dateTime1 = LocalDateTime.parse(startDate + " 00:00", formatter);

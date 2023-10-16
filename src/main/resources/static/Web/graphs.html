@@ -63,8 +63,40 @@
 
       <div id="DIVGraphsAndParameters">
         <div id="GraphInfo"></div>
-        <div id="DIVdownloadParameter">HELLOOO</div>
+        <div id="DIVdownloadParameter">
+          <form>
+              <legend>Disabled fieldset example</legend>
+              <div class="mb-3">
+                <div class="form-check">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown button
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" v-bind:value="entity" v-for="entity of entitiesReport" v-on:click="captureEntityReport(entity)">{{entity}}</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>  
+              <div class="mb-3">
+                <div class="form-check">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown button
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" v-bind:value="report" v-for="report of reportsOptions" v-on:click="captureTypeReport(report)">{{report}}</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+          </form>
+        </div>
       </div>
+      
     </main>
     <footer>
         <h6>All rights reserved</h6>
